@@ -1,4 +1,0 @@
-dependencies {
-	compileOnly group: "biz.aQute.bnd", name: "biz.aQute.bnd.annotation", version: "6.4.0"
-	compileOnly group: "com.liferay.portal", name: "release.dxp.api"
-}
