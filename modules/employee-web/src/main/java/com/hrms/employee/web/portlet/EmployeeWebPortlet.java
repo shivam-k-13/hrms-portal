@@ -7,8 +7,6 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import jakarta.portlet.Portlet;
 
 import org.osgi.service.component.annotations.Component;
-import com.hrms.employee.model.Employee;
-import com.hrms.employee.service.EmployeeLocalServiceUtil;
 
 /**
  * @author 2505478

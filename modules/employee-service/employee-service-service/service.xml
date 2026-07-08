@@ -4,31 +4,31 @@
 <service-builder dependency-injector="ds" package-path="com.hrms.employee">
 	<namespace>HRMS</namespace>
 	<!--<entity data-source="sampleDataSource" local-service="true" name="Foo" remote-service="false" session-factory="sampleSessionFactory" table="foo" tx-manager="sampleTransactionManager uuid="true"">-->
-	<entity local-service="true" name="Employee" remote-service="false" >
+	<entity local-service="true" name="Employee" remote-service="false">
 
-    <column name="employeeId" primary="true" type="long" />
+		<column name="employeeId" primary="true" type="long" />
 
-    <column name="employeeCode" type="String" />
-    <column name="firstName" type="String" />
-    <column name="lastName" type="String" />
-    <column name="email" type="String" />
-    <column name="phoneNumber" type="String" />
-    <column name="department" type="String" />
-    <column name="designation" type="String" />
-    <column name="joiningDate" type="Date" />
-    <column name="status" type="String" />
+		<column name="employeeCode" type="String" />
+		<column name="firstName" type="String" />
+		<column name="lastName" type="String" />
+		<column name="email" type="String" />
+		<column name="phoneNumber" type="String" />
+		<column name="department" type="String" />
+		<column name="designation" type="String" />
+		<column name="joiningDate" type="Date" />
+		<column name="status" type="String" />
 
-    <!-- Group Instance -->
+		<!-- Group Instance -->
 
-    <column name="groupId" type="long" />
+		<column name="groupId" type="long" />
 
-    <!-- Audit Fields -->
+		<!-- Audit Fields -->
 
-    <column name="companyId" type="long" />
-    <column name="userId" type="long" />
-    <column name="userName" type="String" />
-    <column name="createDate" type="Date" />
-    <column name="modifiedDate" type="Date" />
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
 
 	</entity>
 </service-builder>
