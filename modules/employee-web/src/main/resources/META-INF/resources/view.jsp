@@ -1,14 +1,22 @@
-	<%@ include file="/init.jsp" %>
-	
+<%@ include file="/init.jsp" %>
 
-<%-- Create a portlet action URL --%>
+<%-- 2. Imports --%>
+<%@ page import="java.util.List" %>
+<%@ page import="com.hrms.employee.model.Employee" %>
+
+<%-- 3. Create Action URL --%>
 <portlet:actionURL name="/employee/add" var="addEmployeeURL" />
 
-<%-- Display heading --%>
-<h2>Employee Test</h2>
+<%-- 4. Read employee list from request attribute --%>
+<%
+    List<Employee> employees = (List<Employee>) request.getAttribute("employees");
+%>
 
-<%-- Create an HTML form --%>
-<form action="${addEmployeeURL}" method="post">
+<%-- 5. Display heading --%>
+<h2>Add Employee</h2>
+
+<%-- 6. Form --%>
+<form action="${addEmployeeURL}" method="post" class="employee-form">
     
     <div class="form-group">
         <label for="employeeCode">Employee Code:</label>
@@ -50,7 +58,58 @@
         <input type="text" id="status" name="<portlet:namespace />status" class="form-control" />
     </div>
     
-    <%-- Inside form: Button --%>
-    <button type="submit" class="btn btn-primary">Test Action</button>
+    <%-- Submit Button --%>
+    <button type="submit" class="btn btn-primary">Save Employee</button>
     
 </form>
+
+<%-- 7. Horizontal Line --%>
+<hr />
+
+<%-- 8. Display heading --%>
+<h2>Employee List</h2>
+
+<%-- 9. Create HTML Table --%>
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Employee Code</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Department</th>
+            <th>Designation</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <%-- 10. Loop through employees --%>
+        <%
+            if (employees != null && !employees.isEmpty()) {
+                for (Employee employee : employees) {
+        %>
+                    <%-- 11. For each employee print data --%>
+                    <tr>
+                        <td><%= employee.getEmployeeCode() %></td>
+                        <td><%= employee.getFirstName() %></td>
+                        <td><%= employee.getLastName() %></td>
+                        <td><%= employee.getEmail() %></td>
+                        <td><%= employee.getPhoneNumber() %></td>
+                        <td><%= employee.getDepartment() %></td>
+                        <td><%= employee.getDesignation() %></td>
+                        <td><%= employee.getStatus() %></td>
+                    </tr>
+        <%
+                }
+            } else {
+        %>
+                <tr>
+                    <td colspan="8" class="text-center">No employees found.</td>
+                </tr>
+        <%
+            }
+        %>
+    </tbody>
+<%-- 12. Close table --%>
+</table>
