@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.hrms.employee.model.Employee">
+		<field name="employeeId" type="long" />
+		<field name="employeeCode" type="String" />
+		<field name="firstName" type="String" />
+		<field name="lastName" type="String" />
+		<field name="email" type="String" />
+		<field name="phoneNumber" type="String" />
+		<field name="department" type="String" />
+		<field name="designation" type="String" />
+		<field name="joiningDate" type="Date" />
+		<field name="status" type="String" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+	</model>
+</model-hints>
