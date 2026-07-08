@@ -1,0 +1,10 @@
+dependencies {
+    compileOnly group: "com.liferay.portal", name: "release.dxp.api"
+
+    compileOnly project(":modules:ai-assistance:ai-assistance-service:ai-assistance-service-api")
+    compileOnly project(":modules:ai-assistance:ai-assistance-service:ai-assistance-service-service")
+
+    compileInclude group: "org.apache.pdfbox", name: "pdfbox", version: "2.0.30"
+
+    cssBuilder group: "com.liferay", name: "com.liferay.css.builder", version: "3.1.4"
+}

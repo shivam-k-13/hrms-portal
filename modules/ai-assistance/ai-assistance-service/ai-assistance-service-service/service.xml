@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.4.0//EN"
+"http://www.liferay.com/dtd/liferay-service-builder_7_4_0.dtd">
+
+<service-builder dependency-injector="ds"
+    package-path="ai.assistance.service">
+
+    <namespace>AI</namespace>
+
+    <!-- Document Table -->
+    <entity name="Document" local-service="true" remote-service="false">
+
+        <column name="documentId" type="long" primary="true" />
+
+        <column name="groupId" type="long" />
+        <column name="companyId" type="long" />
+        <column name="userId" type="long" />
+        <column name="userName" type="String" />
+        <column name="createDate" type="Date" />
+        <column name="modifiedDate" type="Date" />
+
+        <column name="title" type="String" />
+        <column name="fileEntryId" type="long" />
+        <column name="status" type="String" />
+
+    </entity>
+
+    <!-- Document Chunk Table -->
+    <entity name="DocumentChunk" local-service="true" remote-service="false">
+
+        <column name="chunkId" type="long" primary="true" />
+
+        <column name="documentId" type="long" />
+
+        <column name="chunkText" type="String" />
+
+        <column name="pageNumber" type="int" />
+
+        <column name="embedding" type="String" />
+
+    </entity>
+
+</service-builder>

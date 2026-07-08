@@ -1,0 +1,7 @@
+Bundle-Name: ai-assistance-web
+Bundle-SymbolicName: ai.assistance.web
+Bundle-Version: 1.0.0
+Export-Package: ai.assistance.web.constants
+Provide-Capability:\
+	liferay.language.resources;\
+		resource.bundle.base.name="content.Language"

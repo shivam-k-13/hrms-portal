@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="ai.assistance.service.model.Document">
+		<field name="documentId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="title" type="String" />
+		<field name="fileEntryId" type="long" />
+		<field name="status" type="String" />
+	</model>
+	<model name="ai.assistance.service.model.DocumentChunk">
+		<field name="chunkId" type="long" />
+		<field name="documentId" type="long" />
+		<field name="chunkText" type="String" />
+		<field name="pageNumber" type="int" />
+		<field name="embedding" type="String" />
+	</model>
+</model-hints>
