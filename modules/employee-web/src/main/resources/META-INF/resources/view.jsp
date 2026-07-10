@@ -1,6 +1,7 @@
 <%@ include file="/init.jsp" %>
 
 <%-- 2. Imports --%>
+<%@ page pageEncoding="UTF-8" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.hrms.employee.model.Employee" %>
 
@@ -81,15 +82,26 @@
             <th>Department</th>
             <th>Designation</th>
             <th>Status</th>
+            <th>Edit</th>
+            <th>Delete</th>
         </tr>
     </thead>
     <tbody>
-        <%-- 10. Loop through employees --%>
         <%
             if (employees != null && !employees.isEmpty()) {
                 for (Employee employee : employees) {
         %>
-                    <%-- 11. For each employee print data --%>
+                    <%-- Create Render URL for Editing --%>
+                    <portlet:renderURL var="editEmployeeURL">
+                        <portlet:param name="mvcRenderCommandName" value="/employee/edit" />
+                        <portlet:param name="employeeId" value="<%= String.valueOf(employee.getEmployeeId()) %>" />
+                    </portlet:renderURL>
+
+                    <%-- Corrected Delete Action URL Pattern --%>
+                    <portlet:actionURL name="/employee/delete" var="deleteEmployeeURL">
+                        <portlet:param name="employeeId" value="<%= String.valueOf(employee.getEmployeeId()) %>" />
+                    </portlet:actionURL>
+
                     <tr>
                         <td><%= employee.getEmployeeCode() %></td>
                         <td><%= employee.getFirstName() %></td>
@@ -99,17 +111,28 @@
                         <td><%= employee.getDepartment() %></td>
                         <td><%= employee.getDesignation() %></td>
                         <td><%= employee.getStatus() %></td>
+                        <%-- Edit Button Column --%>
+                        <td>
+                            <a href="${editEmployeeURL}" class="btn btn-secondary btn-sm">Edit</a>
+                        </td>
+                        <%-- Delete Column --%>
+                        <td>
+                            <form action="${deleteEmployeeURL}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this employee?');">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
                     </tr>
         <%
                 }
             } else {
         %>
                 <tr>
-                    <td colspan="8" class="text-center">No employees found.</td>
+                    <td colspan="10" class="text-center">No employees found.</td>
                 </tr>
         <%
             }
         %>
     </tbody>
-<%-- 12. Close table --%>
 </table>
