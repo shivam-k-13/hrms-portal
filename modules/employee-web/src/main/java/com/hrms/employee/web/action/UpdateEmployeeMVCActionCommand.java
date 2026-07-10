@@ -4,9 +4,13 @@ import com.hrms.employee.model.Employee;
 import com.hrms.employee.service.EmployeeLocalService;
 import com.hrms.employee.web.constants.EmployeeWebPortletKeys;
 
+import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.service.RoleLocalService;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -21,8 +25,7 @@ import jakarta.portlet.ActionResponse;
 	},
 	service = MVCActionCommand.class
 )
-public class UpdateEmployeeMVCActionCommand
-	extends BaseMVCActionCommand {
+public class UpdateEmployeeMVCActionCommand extends BaseMVCActionCommand {
 
 	@Override
 	protected void doProcessAction(
@@ -30,11 +33,17 @@ public class UpdateEmployeeMVCActionCommand
 			ActionResponse actionResponse)
 		throws Exception {
 
-		long employeeId = ParamUtil.getLong(
-			actionRequest, "employeeId");
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
-		Employee employee =
-			_employeeLocalService.getEmployee(employeeId);
+		if (!hasManagePermission(themeDisplay)) {
+			System.out.println("UPDATE EMPLOYEE BLOCKED - USER HAS NO PERMISSION");
+			return;
+		}
+
+		long employeeId = ParamUtil.getLong(actionRequest, "employeeId");
+
+		Employee employee = _employeeLocalService.getEmployee(employeeId);
 
 		employee.setEmployeeCode(
 			ParamUtil.getString(actionRequest, "employeeCode"));
@@ -62,11 +71,33 @@ public class UpdateEmployeeMVCActionCommand
 
 		_employeeLocalService.updateEmployee(employee);
 
-		System.out.println(
-			"EMPLOYEE UPDATED : " + employeeId);
+		System.out.println("EMPLOYEE UPDATED : " + employeeId);
+	}
+
+	private boolean hasManagePermission(ThemeDisplay themeDisplay) {
+		return hasRole(themeDisplay, "HRMS Admin") ||
+			hasRole(themeDisplay, "HRMS HR");
+	}
+
+	private boolean hasRole(
+		ThemeDisplay themeDisplay, String roleName) {
+
+		try {
+			Role role = _roleLocalService.getRole(
+				themeDisplay.getCompanyId(), roleName);
+
+			return _roleLocalService.hasUserRole(
+				themeDisplay.getUserId(), role.getRoleId());
+		}
+		catch (Exception exception) {
+			return false;
+		}
 	}
 
 	@Reference
 	private EmployeeLocalService _employeeLocalService;
+
+	@Reference
+	private RoleLocalService _roleLocalService;
 
 }
