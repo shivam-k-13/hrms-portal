@@ -148,36 +148,44 @@
                 
                 <div class="row">
                     <div class="col-md-3 col-sm-6 mb-3">
-                        <div class="card shadow-sm text-center h-100">
-                            <div class="card-body py-4">
-                                <h5 class="card-title font-weight-bold">My Profile</h5>
-                                <p class="text-muted small mb-0">My Profile Card</p>
+                        <a href="/web/hrms/my-profile" class="text-decoration-none text-dark card-link">
+                            <div class="card shadow-sm text-center h-100 dynamic-hover-card">
+                                <div class="card-body py-4">
+                                    <h5 class="card-title font-weight-bold text-success">My Profile</h5>
+                                    <p class="text-muted small mb-0">My Profile Card</p>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col-md-3 col-sm-6 mb-3">
-                        <div class="card shadow-sm text-center h-100">
-                            <div class="card-body py-4">
-                                <h5 class="card-title font-weight-bold">My Attendance</h5>
-                                <p class="text-muted small mb-0">My Attendance Card</p>
+                        <a href="/web/hrms/my-attendance" class="text-decoration-none text-dark card-link">
+                            <div class="card shadow-sm text-center h-100 dynamic-hover-card">
+                                <div class="card-body py-4">
+                                    <h5 class="card-title font-weight-bold text-success">My Attendance</h5>
+                                    <p class="text-muted small mb-0">My Attendance Card</p>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col-md-3 col-sm-6 mb-3">
-                        <div class="card shadow-sm text-center h-100">
-                            <div class="card-body py-4">
-                                <h5 class="card-title font-weight-bold">My Leaves</h5>
-                                <p class="text-muted small mb-0">My Leaves Card</p>
+                        <a href="/web/hrms/my-leaves" class="text-decoration-none text-dark card-link">
+                            <div class="card shadow-sm text-center h-100 dynamic-hover-card">
+                                <div class="card-body py-4">
+                                    <h5 class="card-title font-weight-bold text-success">My Leaves</h5>
+                                    <p class="text-muted small mb-0">My Leaves Card</p>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col-md-3 col-sm-6 mb-3">
-                        <div class="card shadow-sm text-center h-100">
-                            <div class="card-body py-4">
-                                <h5 class="card-title font-weight-bold">My Payslips</h5>
-                                <p class="text-muted small mb-0">My Payslips Card</p>
+                        <a href="/web/hrms/my-payslips" class="text-decoration-none text-dark card-link">
+                            <div class="card shadow-sm text-center h-100 dynamic-hover-card">
+                                <div class="card-body py-4">
+                                    <h5 class="card-title font-weight-bold text-success">My Payslips</h5>
+                                    <p class="text-muted small mb-0">My Payslips Card</p>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -194,3 +202,18 @@
     <% } %>
 
 </div>
+
+<style>
+    /* Keeps styling look clean when wrapped inside an anchor tag */
+    .card-link {
+        display: block;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card-link:hover {
+        text-decoration: none !important;
+    }
+    .dynamic-hover-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15) !important;
+    }
+</style>
