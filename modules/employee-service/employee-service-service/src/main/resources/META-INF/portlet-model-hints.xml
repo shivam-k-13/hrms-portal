@@ -1,6 +1,19 @@
 <?xml version="1.0"?>
 
 <model-hints>
+	<model name="com.hrms.employee.model.Department">
+		<field name="departmentId" type="long" />
+		<field name="departmentCode" type="String" />
+		<field name="departmentName" type="String" />
+		<field name="description" type="String" />
+		<field name="status" type="String" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+	</model>
 	<model name="com.hrms.employee.model.Employee">
 		<field name="employeeId" type="long" />
 		<field name="employeeCode" type="String" />

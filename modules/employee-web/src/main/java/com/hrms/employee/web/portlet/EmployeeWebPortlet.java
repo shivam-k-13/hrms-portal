@@ -1,9 +1,12 @@
 package com.hrms.employee.web.portlet;
 
+import com.hrms.employee.model.Department;
 import com.hrms.employee.model.Employee;
+import com.hrms.employee.service.DepartmentLocalService;
 import com.hrms.employee.service.EmployeeLocalService;
 import com.hrms.employee.web.constants.EmployeeWebPortletKeys;
 
+import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.service.RoleLocalService;
@@ -46,16 +49,28 @@ public class EmployeeWebPortlet extends MVCPortlet {
 		ThemeDisplay themeDisplay =
 			(ThemeDisplay)renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
+		Layout layout = themeDisplay.getLayout();
+
+		String currentPageFriendlyURL = layout.getFriendlyURL();
+
 		List<Employee> employees =
 			_employeeLocalService.getEmployees(-1, -1);
+
+		List<Department> departments =
+			_departmentLocalService.getDepartments(-1, -1);
 
 		boolean canManageEmployees = hasRole(
 			themeDisplay, "HRMS Admin") ||
 			hasRole(themeDisplay, "HRMS HR");
 
 		renderRequest.setAttribute("employees", employees);
+		renderRequest.setAttribute("departments", departments);
 		renderRequest.setAttribute(
 			"canManageEmployees", canManageEmployees);
+		renderRequest.setAttribute(
+			"canManageDepartments", canManageEmployees);
+		renderRequest.setAttribute(
+			"currentPageFriendlyURL", currentPageFriendlyURL);
 
 		super.render(renderRequest, renderResponse);
 	}
@@ -77,6 +92,9 @@ public class EmployeeWebPortlet extends MVCPortlet {
 
 	@Reference
 	private EmployeeLocalService _employeeLocalService;
+
+	@Reference
+	private DepartmentLocalService _departmentLocalService;
 
 	@Reference
 	private RoleLocalService _roleLocalService;

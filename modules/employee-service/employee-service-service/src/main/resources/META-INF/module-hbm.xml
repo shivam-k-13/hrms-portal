@@ -2,65 +2,41 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping auto-import="false" default-lazy="false">
+	<import class="com.hrms.employee.model.Department" />
 	<import class="com.hrms.employee.model.Employee" />
-	<class name="com.hrms.employee.model.impl.EmployeeImpl"
-		table="HRMS_Employee">
-		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor"
-			name="employeeId" type="long">
+	<class name="com.hrms.employee.model.impl.DepartmentImpl" table="HRMS_Department">
+		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="departmentId" type="long">
 			<generator class="assigned" />
 		</id>
-		<property
-			access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor"
-			name="employeeCode"
-			type="com.liferay.portal.dao.orm.hibernate.StringType" />
-		<property
-			access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor"
-			name="firstName"
-			type="com.liferay.portal.dao.orm.hibernate.StringType" />
-		<property
-			access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor"
-			name="lastName"
-			type="com.liferay.portal.dao.orm.hibernate.StringType" />
-		<property
-			access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor"
-			name="email" type="com.liferay.portal.dao.orm.hibernate.StringType" />
-		<property
-			access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor"
-			name="phoneNumber"
-			type="com.liferay.portal.dao.orm.hibernate.StringType" />
-		<property
-			access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor"
-			name="department"
-			type="com.liferay.portal.dao.orm.hibernate.StringType" />
-		<property
-			access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor"
-			name="designation"
-			type="com.liferay.portal.dao.orm.hibernate.StringType" />
-		<property
-			access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor"
-			name="joiningDate" type="org.hibernate.type.TimestampType" />
-		<property
-			access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor"
-			name="status" type="com.liferay.portal.dao.orm.hibernate.StringType" />
-		<property
-			access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor"
-			name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
-		<property
-			access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor"
-			name="companyId"
-			type="com.liferay.portal.dao.orm.hibernate.LongType" />
-		<property
-			access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor"
-			name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
-		<property
-			access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor"
-			name="userName"
-			type="com.liferay.portal.dao.orm.hibernate.StringType" />
-		<property
-			access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor"
-			name="createDate" type="org.hibernate.type.TimestampType" />
-		<property
-			access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor"
-			name="modifiedDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="departmentCode" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="departmentName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="description" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="status" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="userName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedDate" type="org.hibernate.type.TimestampType" />
+	</class>
+	<class name="com.hrms.employee.model.impl.EmployeeImpl" table="HRMS_Employee">
+		<id access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="employeeId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="employeeCode" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="firstName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="lastName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="email" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="phoneNumber" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="department" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="designation" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="joiningDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="status" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="groupId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="userName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="createDate" type="org.hibernate.type.TimestampType" />
+		<property access="com.liferay.portal.dao.orm.hibernate.MethodPropertyAccessor" name="modifiedDate" type="org.hibernate.type.TimestampType" />
 	</class>
 </hibernate-mapping>
