@@ -260,4 +260,4 @@ public interface DesignationLocalService
 	public Designation updateDesignation(Designation designation);
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1589548153
+// LIFERAY-SERVICE-BUILDER-HASH:-482958619

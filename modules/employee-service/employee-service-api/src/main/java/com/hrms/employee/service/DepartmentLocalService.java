@@ -259,4 +259,4 @@ public interface DepartmentLocalService
 	public Department updateDepartment(Department department);
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1118336543
+// LIFERAY-SERVICE-BUILDER-HASH:-1205538934

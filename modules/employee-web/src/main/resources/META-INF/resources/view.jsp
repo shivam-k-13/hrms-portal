@@ -123,7 +123,7 @@
         </table>
 
     <%-- ========================================== --%>
-    <%-- ROUTE: DEPARTMENT MANAGEMENT               --%>
+    <%-- ROUTE: DEPARTMENT MANAGEMENT (FIXED ELSE IF)--%>
     <%-- ========================================== --%>
     <% } else if (currentURL.contains("department-management")) { %>
         
@@ -252,14 +252,30 @@
                     <input type="tel" id="phoneNumber" name="<portlet:namespace />phoneNumber" class="form-control" />
                 </div>
 
+                <%-- Dynamic Dropdown Substitution: Department --%>
                 <div class="form-group">
                     <label for="department">Department:</label>
-                    <input type="text" id="department" name="<portlet:namespace />department" class="form-control" />
+                    <select id="department" name="<portlet:namespace />department" class="form-control">
+                        <option value="">Select Department</option>
+                        <% if (departments != null) { 
+                            for (Department department : departments) { %>
+                                <option value="<%= department.getDepartmentName() %>"><%= department.getDepartmentName() %></option>
+                            <% } 
+                        } %>
+                    </select>
                 </div>
 
+                <%-- Dynamic Dropdown Substitution: Designation --%>
                 <div class="form-group">
                     <label for="designation">Designation:</label>
-                    <input type="text" id="designation" name="<portlet:namespace />designation" class="form-control" />
+                    <select id="designation" name="<portlet:namespace />designation" class="form-control">
+                        <option value="">Select Designation</option>
+                        <% if (designations != null) { 
+                            for (Designation designation : designations) { %>
+                                <option value="<%= designation.getDesignationName() %>"><%= designation.getDesignationName() %></option>
+                            <% } 
+                        } %>
+                    </select>
                 </div>
 
                 <div class="form-group">
