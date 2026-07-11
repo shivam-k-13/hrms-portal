@@ -8,6 +8,7 @@ package com.hrms.employee.service.base;
 import com.hrms.employee.model.Employee;
 import com.hrms.employee.service.EmployeeLocalService;
 import com.hrms.employee.service.persistence.DepartmentPersistence;
+import com.hrms.employee.service.persistence.DesignationPersistence;
 import com.hrms.employee.service.persistence.EmployeePersistence;
 
 import com.liferay.petra.sql.dsl.query.DSLQuery;
@@ -436,6 +437,9 @@ public abstract class EmployeeLocalServiceBaseImpl
 	@Reference
 	protected DepartmentPersistence departmentPersistence;
 
+	@Reference
+	protected DesignationPersistence designationPersistence;
+
 	protected EmployeeLocalService employeeLocalService;
 
 	@Reference
@@ -461,4 +465,4 @@ public abstract class EmployeeLocalServiceBaseImpl
 		EmployeeLocalServiceBaseImpl.class);
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1417037326
+// LIFERAY-SERVICE-BUILDER-HASH:1316333242

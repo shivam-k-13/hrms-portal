@@ -5,7 +5,7 @@
 
 package com.hrms.employee.service;
 
-import com.hrms.employee.model.Department;
+import com.hrms.employee.model.Designation;
 
 import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
@@ -31,13 +31,13 @@ import java.util.List;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
- * Provides the local service interface for Department. Methods of this
+ * Provides the local service interface for Designation. Methods of this
  * service will not have security checks based on the propagated JAAS
  * credentials because this service can only be accessed from within the same
  * VM.
  *
  * @author Brian Wing Shun Chan
- * @see DepartmentLocalServiceUtil
+ * @see DesignationLocalServiceUtil
  * @generated
  */
 @ProviderType
@@ -45,36 +45,36 @@ import org.osgi.annotation.versioning.ProviderType;
 	isolation = Isolation.PORTAL,
 	rollbackFor = {PortalException.class, SystemException.class}
 )
-public interface DepartmentLocalService
+public interface DesignationLocalService
 	extends BaseLocalService, PersistedModelLocalService {
 
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never modify this interface directly. Add custom service methods to <code>com.hrms.employee.service.impl.DepartmentLocalServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface. Consume the department local service via injection or a <code>org.osgi.util.tracker.ServiceTracker</code>. Use {@link DepartmentLocalServiceUtil} if injection and service tracking are not available.
+	 * Never modify this interface directly. Add custom service methods to <code>com.hrms.employee.service.impl.DesignationLocalServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface. Consume the designation local service via injection or a <code>org.osgi.util.tracker.ServiceTracker</code>. Use {@link DesignationLocalServiceUtil} if injection and service tracking are not available.
 	 */
 
 	/**
-	 * Adds the department to the database. Also notifies the appropriate model listeners.
+	 * Adds the designation to the database. Also notifies the appropriate model listeners.
 	 *
 	 * <p>
-	 * <strong>Important:</strong> Inspect DepartmentLocalServiceImpl for overloaded versions of the method. If provided, use these entry points to the API, as the implementation logic may require the additional parameters defined there.
+	 * <strong>Important:</strong> Inspect DesignationLocalServiceImpl for overloaded versions of the method. If provided, use these entry points to the API, as the implementation logic may require the additional parameters defined there.
 	 * </p>
 	 *
-	 * @param department the department
-	 * @return the department that was added
+	 * @param designation the designation
+	 * @return the designation that was added
 	 */
 	@Indexable(type = IndexableType.REINDEX)
-	public Department addDepartment(Department department);
+	public Designation addDesignation(Designation designation);
 
 	/**
-	 * Creates a new department with the primary key. Does not add the department to the database.
+	 * Creates a new designation with the primary key. Does not add the designation to the database.
 	 *
-	 * @param departmentId the primary key for the new department
-	 * @return the new department
+	 * @param designationId the primary key for the new designation
+	 * @return the new designation
 	 */
 	@Transactional(enabled = false)
-	public Department createDepartment(long departmentId);
+	public Designation createDesignation(long designationId);
 
 	/**
 	 * @throws PortalException
@@ -83,31 +83,31 @@ public interface DepartmentLocalService
 		throws PortalException;
 
 	/**
-	 * Deletes the department from the database. Also notifies the appropriate model listeners.
+	 * Deletes the designation from the database. Also notifies the appropriate model listeners.
 	 *
 	 * <p>
-	 * <strong>Important:</strong> Inspect DepartmentLocalServiceImpl for overloaded versions of the method. If provided, use these entry points to the API, as the implementation logic may require the additional parameters defined there.
+	 * <strong>Important:</strong> Inspect DesignationLocalServiceImpl for overloaded versions of the method. If provided, use these entry points to the API, as the implementation logic may require the additional parameters defined there.
 	 * </p>
 	 *
-	 * @param department the department
-	 * @return the department that was removed
+	 * @param designation the designation
+	 * @return the designation that was removed
 	 */
 	@Indexable(type = IndexableType.DELETE)
-	public Department deleteDepartment(Department department);
+	public Designation deleteDesignation(Designation designation);
 
 	/**
-	 * Deletes the department with the primary key from the database. Also notifies the appropriate model listeners.
+	 * Deletes the designation with the primary key from the database. Also notifies the appropriate model listeners.
 	 *
 	 * <p>
-	 * <strong>Important:</strong> Inspect DepartmentLocalServiceImpl for overloaded versions of the method. If provided, use these entry points to the API, as the implementation logic may require the additional parameters defined there.
+	 * <strong>Important:</strong> Inspect DesignationLocalServiceImpl for overloaded versions of the method. If provided, use these entry points to the API, as the implementation logic may require the additional parameters defined there.
 	 * </p>
 	 *
-	 * @param departmentId the primary key of the department
-	 * @return the department that was removed
-	 * @throws PortalException if a department with the primary key could not be found
+	 * @param designationId the primary key of the designation
+	 * @return the designation that was removed
+	 * @throws PortalException if a designation with the primary key could not be found
 	 */
 	@Indexable(type = IndexableType.DELETE)
-	public Department deleteDepartment(long departmentId)
+	public Designation deleteDesignation(long designationId)
 		throws PortalException;
 
 	/**
@@ -139,7 +139,7 @@ public interface DepartmentLocalService
 	 * Performs a dynamic query on the database and returns a range of the matching rows.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>com.hrms.employee.model.impl.DepartmentModelImpl</code>.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>com.hrms.employee.model.impl.DesignationModelImpl</code>.
 	 * </p>
 	 *
 	 * @param dynamicQuery the dynamic query
@@ -155,7 +155,7 @@ public interface DepartmentLocalService
 	 * Performs a dynamic query on the database and returns an ordered range of the matching rows.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>com.hrms.employee.model.impl.DepartmentModelImpl</code>.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>com.hrms.employee.model.impl.DesignationModelImpl</code>.
 	 * </p>
 	 *
 	 * @param dynamicQuery the dynamic query
@@ -190,42 +190,43 @@ public interface DepartmentLocalService
 		DynamicQuery dynamicQuery, Projection projection);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public Department fetchDepartment(long departmentId);
+	public Designation fetchDesignation(long designationId);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
 
 	/**
-	 * Returns the department with the primary key.
+	 * Returns the designation with the primary key.
 	 *
-	 * @param departmentId the primary key of the department
-	 * @return the department
-	 * @throws PortalException if a department with the primary key could not be found
+	 * @param designationId the primary key of the designation
+	 * @return the designation
+	 * @throws PortalException if a designation with the primary key could not be found
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public Department getDepartment(long departmentId) throws PortalException;
+	public Designation getDesignation(long designationId)
+		throws PortalException;
 
 	/**
-	 * Returns a range of all the departments.
+	 * Returns a range of all the designations.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>com.hrms.employee.model.impl.DepartmentModelImpl</code>.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>com.hrms.employee.model.impl.DesignationModelImpl</code>.
 	 * </p>
 	 *
-	 * @param start the lower bound of the range of departments
-	 * @param end the upper bound of the range of departments (not inclusive)
-	 * @return the range of departments
+	 * @param start the lower bound of the range of designations
+	 * @param end the upper bound of the range of designations (not inclusive)
+	 * @return the range of designations
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<Department> getDepartments(int start, int end);
+	public List<Designation> getDesignations(int start, int end);
 
 	/**
-	 * Returns the number of departments.
+	 * Returns the number of designations.
 	 *
-	 * @return the number of departments
+	 * @return the number of designations
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public int getDepartmentsCount();
+	public int getDesignationsCount();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
@@ -246,17 +247,17 @@ public interface DepartmentLocalService
 		throws PortalException;
 
 	/**
-	 * Updates the department in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
+	 * Updates the designation in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * <p>
-	 * <strong>Important:</strong> Inspect DepartmentLocalServiceImpl for overloaded versions of the method. If provided, use these entry points to the API, as the implementation logic may require the additional parameters defined there.
+	 * <strong>Important:</strong> Inspect DesignationLocalServiceImpl for overloaded versions of the method. If provided, use these entry points to the API, as the implementation logic may require the additional parameters defined there.
 	 * </p>
 	 *
-	 * @param department the department
-	 * @return the department that was updated
+	 * @param designation the designation
+	 * @return the designation that was updated
 	 */
 	@Indexable(type = IndexableType.REINDEX)
-	public Department updateDepartment(Department department);
+	public Designation updateDesignation(Designation designation);
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1118336543
+// LIFERAY-SERVICE-BUILDER-HASH:1589548153

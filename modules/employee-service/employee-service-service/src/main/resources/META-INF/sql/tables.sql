@@ -12,6 +12,20 @@ create table HRMS_Department (
 	modifiedDate DATE null
 );
 
+create table HRMS_Designation (
+	designationId LONG not null primary key,
+	designationCode VARCHAR(75) null,
+	designationName VARCHAR(75) null,
+	description VARCHAR(75) null,
+	status VARCHAR(75) null,
+	groupId LONG,
+	companyId LONG,
+	userId LONG,
+	userName VARCHAR(75) null,
+	createDate DATE null,
+	modifiedDate DATE null
+);
+
 create table HRMS_Employee (
 	employeeId LONG not null primary key,
 	employeeCode VARCHAR(75) null,

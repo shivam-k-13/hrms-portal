@@ -40,4 +40,22 @@
 		<column name="createDate" type="Date" />
 		<column name="modifiedDate" type="Date" />
 	</entity>
+	<entity local-service="true" name="Designation" remote-service="false">
+
+	<column name="designationId" primary="true" type="long" />
+
+	<column name="designationCode" type="String" />
+	<column name="designationName" type="String" />
+	<column name="description" type="String" />
+	<column name="status" type="String" />
+
+	<column name="groupId" type="long" />
+
+	<column name="companyId" type="long" />
+	<column name="userId" type="long" />
+	<column name="userName" type="String" />
+	<column name="createDate" type="Date" />
+	<column name="modifiedDate" type="Date" />
+
+</entity>
 </service-builder>

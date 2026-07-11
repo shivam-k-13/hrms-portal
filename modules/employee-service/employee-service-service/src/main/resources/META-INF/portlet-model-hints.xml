@@ -14,6 +14,19 @@
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
 	</model>
+	<model name="com.hrms.employee.model.Designation">
+		<field name="designationId" type="long" />
+		<field name="designationCode" type="String" />
+		<field name="designationName" type="String" />
+		<field name="description" type="String" />
+		<field name="status" type="String" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+	</model>
 	<model name="com.hrms.employee.model.Employee">
 		<field name="employeeId" type="long" />
 		<field name="employeeCode" type="String" />

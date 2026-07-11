@@ -258,4 +258,4 @@ public interface EmployeeLocalService
 	public Employee updateEmployee(Employee employee);
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1425108222
+// LIFERAY-SERVICE-BUILDER-HASH:232301295
