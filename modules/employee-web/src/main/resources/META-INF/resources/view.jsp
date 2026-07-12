@@ -18,11 +18,29 @@
     Boolean canManageDepartments = (Boolean) request.getAttribute("canManageDepartments");
     Boolean canManageDesignations = (Boolean) request.getAttribute("canManageDesignations");
     
+    // Search/Filter Attributes
+    String keyword = (String) request.getAttribute("keyword");
+    String statusFilter = (String) request.getAttribute("statusFilter");
+    
+    // Pagination Attributes
+    Integer pageNumber = (Integer) request.getAttribute("pageNumber");
+    Integer pageSize = (Integer) request.getAttribute("pageSize");
+    Integer totalPages = (Integer) request.getAttribute("totalPages");
+    Integer totalEmployeesCount = (Integer) request.getAttribute("totalEmployeesCount");
+    
     // Null safety fallbacks
     String currentURL = (currentPageFriendlyURL != null) ? currentPageFriendlyURL : "";
     boolean sManageEmployees = (canManageEmployees != null) ? canManageEmployees : false;
     boolean sManageDepartments = (canManageDepartments != null) ? canManageDepartments : false;
     boolean sManageDesignations = (canManageDesignations != null) ? canManageDesignations : false;
+    
+    String currentKeyword = (keyword != null) ? keyword : "";
+    String currentStatusFilter = (statusFilter != null) ? statusFilter : "";
+    
+    int currentPageNum = (pageNumber != null) ? pageNumber : 1;
+    int currentPageSize = (pageSize != null) ? pageSize : 10;
+    int totalPageCount = (totalPages != null) ? totalPages : 1;
+    int totalEmpCount = (totalEmployeesCount != null) ? totalEmployeesCount : 0;
 %>
 
 <div class="container-fluid my-4">
@@ -123,7 +141,7 @@
         </table>
 
     <%-- ========================================== --%>
-    <%-- ROUTE: DEPARTMENT MANAGEMENT (FIXED ELSE IF)--%>
+    <%-- ROUTE: DEPARTMENT MANAGEMENT               --%>
     <%-- ========================================== --%>
     <% } else if (currentURL.contains("department-management")) { %>
         
@@ -289,9 +307,39 @@
             <hr />
         <% } %>
 
+        <%-- ========================================== --%>
+        <%-- SEARCH / FILTER SECTION                    --%>
+        <%-- ========================================== --%>
+        <portlet:renderURL var="employeeSearchURL" />
+        
+        <form action="${employeeSearchURL}" method="get" class="form-inline my-4 p-3 bg-light border rounded">
+            <%-- Hidden Field: Forces form submission searches back to page 1 --%>
+            <input type="hidden" name="<portlet:namespace />pageNumber" value="1" />
+            <input type="hidden" name="<portlet:namespace />pageSize" value="<%= currentPageSize %>" />
+
+            <div class="form-group mr-3">
+                <label for="employeeKeyword" class="mr-2">Search:</label>
+                <input type="text" id="employeeKeyword" name="<portlet:namespace />keyword" 
+                       value="<%= currentKeyword %>" class="form-control" style="min-width: 350px;"
+                       placeholder="Search by code, name, email, department, designation" />
+            </div>
+            
+            <div class="form-group mr-3">
+                <label for="employeeStatusFilter" class="mr-2">Status:</label>
+                <select id="employeeStatusFilter" name="<portlet:namespace />statusFilter" class="form-control">
+                    <option value="">All Status</option>
+                    <option value="Active" <%= "Active".equalsIgnoreCase(currentStatusFilter) ? "selected" : "" %>>Active</option>
+                    <option value="Inactive" <%= "Inactive".equalsIgnoreCase(currentStatusFilter) ? "selected" : "" %>>Inactive</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn btn-info mr-2">Search</button>
+            <a href="/web/hrms/employee-management" class="btn btn-secondary">Reset</a>
+        </form>
+
         <h2>Employee List</h2>
 
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered mb-3">
             <thead>
                 <tr>
                     <th>Employee Code</th>
@@ -352,6 +400,76 @@
                 <% } %>
             </tbody>
         </table>
+
+        <%-- ========================================== --%>
+        <%-- PAGINATION NAVIGATION UI                   --%>
+        <%-- ========================================== --%>
+        <div class="d-flex justify-content-between align-items-center my-4">
+            <div>
+                <span class="text-muted">Showing page <strong><%= currentPageNum %></strong> of <strong><%= totalPageCount %></strong></span>
+                <span class="mx-2 text-muted">|</span>
+                <span class="text-muted">Total employees: <strong><%= totalEmpCount %></strong></span>
+            </div>
+
+            <nav aria-label="Employee List Pagination">
+                <ul class="pagination mb-0">
+                    
+                    <%-- Previous Button Block --%>
+                    <% if (currentPageNum <= 1) { %>
+                        <li class="page-item disabled">
+                            <span class="page-link">Previous</span>
+                        </li>
+                    <% } else { %>
+                        <portlet:renderURL var="prevPageURL">
+                            <portlet:param name="keyword" value="<%= currentKeyword %>" />
+                            <portlet:param name="statusFilter" value="<%= currentStatusFilter %>" />
+                            <portlet:param name="pageNumber" value="<%= String.valueOf(currentPageNum - 1) %>" />
+                            <portlet:param name="pageSize" value="<%= String.valueOf(currentPageSize) %>" />
+                        </portlet:renderURL>
+                        <li class="page-item">
+                            <a class="page-link" href="${prevPageURL}">Previous</a>
+                        </li>
+                    <% } %>
+
+                    <%-- Dynamic Page Range Matrix Generation Loop --%>
+                    <% for (int i = 1; i <= totalPageCount; i++) { %>
+                        <% if (i == currentPageNum) { %>
+                            <li class="page-item active" aria-current="page">
+                                <span class="page-link"><%= i %></span>
+                            </li>
+                        <% } else { %>
+                            <portlet:renderURL var="numberedPageURL">
+                                <portlet:param name="keyword" value="<%= currentKeyword %>" />
+                                <portlet:param name="statusFilter" value="<%= currentStatusFilter %>" />
+                                <portlet:param name="pageNumber" value="<%= String.valueOf(i) %>" />
+                                <portlet:param name="pageSize" value="<%= String.valueOf(currentPageSize) %>" />
+                            </portlet:renderURL>
+                            <li class="page-item">
+                                <a class="page-link" href="${numberedPageURL}"><%= i %></a>
+                            </li>
+                        <% } %>
+                    <% } %>
+
+                    <%-- Next Button Block --%>
+                    <% if (currentPageNum >= totalPageCount) { %>
+                        <li class="page-item disabled">
+                            <span class="page-link">Next</span>
+                        </li>
+                    <% } else { %>
+                        <portlet:renderURL var="nextPageURL">
+                            <portlet:param name="keyword" value="<%= currentKeyword %>" />
+                            <portlet:param name="statusFilter" value="<%= currentStatusFilter %>" />
+                            <portlet:param name="pageNumber" value="<%= String.valueOf(currentPageNum + 1) %>" />
+                            <portlet:param name="pageSize" value="<%= String.valueOf(currentPageSize) %>" />
+                        </portlet:renderURL>
+                        <li class="page-item">
+                            <a class="page-link" href="${nextPageURL}">Next</a>
+                        </li>
+                    <% } %>
+                    
+                </ul>
+            </nav>
+        </div>
         
     <% } %>
 
