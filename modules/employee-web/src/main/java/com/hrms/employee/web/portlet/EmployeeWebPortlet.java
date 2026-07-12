@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,8 +67,10 @@ public class EmployeeWebPortlet extends MVCPortlet {
 		int pageNumber = getIntParameter(renderRequest, "pageNumber", 1);
 		int pageSize = getIntParameter(renderRequest, "pageSize", 5);
 
-		List<Employee> employees =
+		List<Employee> allEmployees =
 			_employeeLocalService.getEmployees(-1, -1);
+
+		List<Employee> employees = allEmployees;
 
 		if (currentPageFriendlyURL.contains("employee-management")) {
 			employees = filterEmployees(employees, keyword, statusFilter);
@@ -107,7 +110,17 @@ public class EmployeeWebPortlet extends MVCPortlet {
 			hasRole(themeDisplay, "HRMS Admin") ||
 			hasRole(themeDisplay, "HRMS HR");
 
+		Map<String, Integer> departmentWiseCount =
+			getDepartmentWiseCount(allEmployees);
+
+		Map<String, Integer> designationWiseCount =
+			getDesignationWiseCount(allEmployees);
+
+		int activeEmployees = getStatusCount(allEmployees, "Active");
+		int inactiveEmployees = getStatusCount(allEmployees, "Inactive");
+
 		renderRequest.setAttribute("employees", paginatedEmployees);
+		renderRequest.setAttribute("allEmployees", allEmployees);
 		renderRequest.setAttribute("departments", departments);
 		renderRequest.setAttribute("designations", designations);
 
@@ -119,6 +132,12 @@ public class EmployeeWebPortlet extends MVCPortlet {
 		renderRequest.setAttribute("totalPages", totalPages);
 		renderRequest.setAttribute("totalEmployeesCount", totalEmployeesCount);
 
+		renderRequest.setAttribute("reportTotalEmployees", allEmployees.size());
+		renderRequest.setAttribute("reportActiveEmployees", activeEmployees);
+		renderRequest.setAttribute("reportInactiveEmployees", inactiveEmployees);
+		renderRequest.setAttribute("departmentWiseCount", departmentWiseCount);
+		renderRequest.setAttribute("designationWiseCount", designationWiseCount);
+
 		renderRequest.setAttribute("canManageEmployees", canManageEmployees);
 		renderRequest.setAttribute("canManageDepartments", canManageEmployees);
 		renderRequest.setAttribute("canManageDesignations", canManageEmployees);
@@ -127,6 +146,60 @@ public class EmployeeWebPortlet extends MVCPortlet {
 			"currentPageFriendlyURL", currentPageFriendlyURL);
 
 		super.render(renderRequest, renderResponse);
+	}
+
+	private Map<String, Integer> getDepartmentWiseCount(
+		List<Employee> employees) {
+
+		Map<String, Integer> departmentWiseCount = new LinkedHashMap<>();
+
+		for (Employee employee : employees) {
+			String department = employee.getDepartment();
+
+			if ((department == null) || department.isEmpty()) {
+				department = "Not Assigned";
+			}
+
+			departmentWiseCount.put(
+				department,
+				departmentWiseCount.getOrDefault(department, 0) + 1);
+		}
+
+		return departmentWiseCount;
+	}
+
+	private Map<String, Integer> getDesignationWiseCount(
+		List<Employee> employees) {
+
+		Map<String, Integer> designationWiseCount = new LinkedHashMap<>();
+
+		for (Employee employee : employees) {
+			String designation = employee.getDesignation();
+
+			if ((designation == null) || designation.isEmpty()) {
+				designation = "Not Assigned";
+			}
+
+			designationWiseCount.put(
+				designation,
+				designationWiseCount.getOrDefault(designation, 0) + 1);
+		}
+
+		return designationWiseCount;
+	}
+
+	private int getStatusCount(
+		List<Employee> employees, String status) {
+
+		int count = 0;
+
+		for (Employee employee : employees) {
+			if (status.equalsIgnoreCase(employee.getStatus())) {
+				count++;
+			}
+		}
+
+		return count;
 	}
 
 	private int getIntParameter(

@@ -3,6 +3,7 @@
 <%-- 2. Imports --%>
 <%@ page pageEncoding="UTF-8" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Map" %>
 <%@ page import="com.hrms.employee.model.Employee" %>
 <%@ page import="com.hrms.employee.model.Department" %>
 <%@ page import="com.hrms.employee.model.Designation" %>
@@ -28,6 +29,13 @@
     Integer totalPages = (Integer) request.getAttribute("totalPages");
     Integer totalEmployeesCount = (Integer) request.getAttribute("totalEmployeesCount");
     
+    // Reports Attributes
+    Integer reportTotalEmployees = (Integer) request.getAttribute("reportTotalEmployees");
+    Integer reportActiveEmployees = (Integer) request.getAttribute("reportActiveEmployees");
+    Integer reportInactiveEmployees = (Integer) request.getAttribute("reportInactiveEmployees");
+    Map<String, Integer> departmentWiseCount = (Map<String, Integer>) request.getAttribute("departmentWiseCount");
+    Map<String, Integer> designationWiseCount = (Map<String, Integer>) request.getAttribute("designationWiseCount");
+    
     // Null safety fallbacks
     String currentURL = (currentPageFriendlyURL != null) ? currentPageFriendlyURL : "";
     boolean sManageEmployees = (canManageEmployees != null) ? canManageEmployees : false;
@@ -41,6 +49,10 @@
     int currentPageSize = (pageSize != null) ? pageSize : 10;
     int totalPageCount = (totalPages != null) ? totalPages : 1;
     int totalEmpCount = (totalEmployeesCount != null) ? totalEmployeesCount : 0;
+
+    int rTotal = (reportTotalEmployees != null) ? reportTotalEmployees : 0;
+    int rActive = (reportActiveEmployees != null) ? reportActiveEmployees : 0;
+    int rInactive = (reportInactiveEmployees != null) ? reportInactiveEmployees : 0;
 %>
 
 <div class="container-fluid my-4">
@@ -235,6 +247,110 @@
         </table>
 
     <%-- ========================================== --%>
+    <%-- ROUTE: EMPLOYEE REPORTS                    --%>
+    <%-- ========================================== --%>
+    <% } else if (currentURL.contains("employee-reports")) { %>
+
+        <h2 class="mb-4">Employee Reports</h2>
+
+        <%-- Summary KPI Metrics Ribbon --%>
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card bg-primary text-white shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-uppercase font-weight-bold small">Total Employees</h5>
+                        <p class="card-text display-4 font-weight-bold mb-0"><%= rTotal %></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-success text-white shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-uppercase font-weight-bold small">Active Employees</h5>
+                        <p class="card-text display-4 font-weight-bold mb-0"><%= rActive %></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-danger text-white shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-uppercase font-weight-bold small">Inactive Employees</h5>
+                        <p class="card-text display-4 font-weight-bold mb-0"><%= rInactive %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%-- Breakdown Distribution Data Layer Tables --%>
+        <div class="row">
+            <%-- Department Breakdown Matrix --%>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 shadow-sm border-light">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0 text-secondary">Department-wise Distribution Matrix</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table table-striped table-hover mb-0">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Department</th>
+                                    <th>Employee Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (departmentWiseCount != null && !departmentWiseCount.isEmpty()) { 
+                                    for (Map.Entry<String, Integer> entry : departmentWiseCount.entrySet()) { %>
+                                        <tr>
+                                            <td><%= (entry.getKey() != null && !entry.getKey().isEmpty()) ? entry.getKey() : "Unassigned" %></td>
+                                            <td><strong><%= entry.getValue() %></strong></td>
+                                        </tr>
+                                    <% } 
+                                } else { %>
+                                    <tr>
+                                        <td colspan="2" class="text-center text-muted py-3">No departmental reporting metrics found.</td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <%-- Designation Breakdown Matrix --%>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 shadow-sm border-light">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0 text-secondary">Designation-wise Distribution Matrix</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table table-striped table-hover mb-0">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Designation</th>
+                                    <th>Employee Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (designationWiseCount != null && !designationWiseCount.isEmpty()) { 
+                                    for (Map.Entry<String, Integer> entry : designationWiseCount.entrySet()) { %>
+                                        <tr>
+                                            <td><%= (entry.getKey() != null && !entry.getKey().isEmpty()) ? entry.getKey() : "Unassigned" %></td>
+                                            <td><strong><%= entry.getValue() %></strong></td>
+                                        </tr>
+                                    <% } 
+                                } else { %>
+                                    <tr>
+                                        <td colspan="2" class="text-center text-muted py-3">No operational designation metrics found.</td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <%-- ========================================== --%>
     <%-- ROUTE: EMPLOYEE MANAGEMENT (DEFAULT)       --%>
     <%-- ========================================== --%>
     <% } else { %>
@@ -349,7 +465,7 @@
                     <th>Department</th>
                     <th>Designation</th>
                     <th>Status</th>
-                    <th>View</th> <%-- New Global Column --%>
+                    <th>View</th>
                     <% if (sManageEmployees) { %>
                         <th>Edit</th>
                         <th>Delete</th>
@@ -404,7 +520,6 @@
                     <% }
                 } else { %>
                     <tr>
-                        <%-- Colspan shifted to 9 / 11 to support the additional View structure element --%>
                         <td colspan="<%= sManageEmployees ? 11 : 9 %>" class="text-center">No employees found.</td>
                     </tr>
                 <% } %>
@@ -484,4 +599,3 @@
     <% } %>
 
 </div>
-
