@@ -1,5 +1,8 @@
 <%@ include file="/init.jsp" %>
 
+<%-- Imports --%>
+<%@ page pageEncoding="UTF-8" %>
+
 <%-- Read request attributes --%>
 <%
     String currentPageFriendlyURL = (String) request.getAttribute("currentPageFriendlyURL");
@@ -11,209 +14,244 @@
 
     // Null safety fallbacks
     String currentURL = (currentPageFriendlyURL != null) ? currentPageFriendlyURL : "";
-    int employeeCount = (totalEmployees != null) ? totalEmployees : 0;
+    int empCount = (totalEmployees != null) ? totalEmployees : 0;
     boolean sAdmin = (isAdmin != null) ? isAdmin : false;
     boolean sHR = (isHR != null) ? isHR : false;
     boolean sManager = (isManager != null) ? isManager : false;
     boolean sEmployee = (isEmployee != null) ? isEmployee : false;
-
-    // Track if a valid view was rendered to handle unknown URLs or access denial cleanly
-    boolean authorizationChecked = false;
-    boolean hasAccess = false;
 %>
 
 <div class="container-fluid my-4">
 
     <%-- ========================================== --%>
-    <%-- 1. ADMIN DASHBOARD ROUTING --%>
+    <%-- 1. ROUTE: DASHBOARD ROUTER                 --%>
     <%-- ========================================== --%>
-    <% if (currentURL.contains("admin-dashboard")) { 
-        authorizationChecked = true;
-        if (sAdmin) { 
-            hasAccess = true; %>
-            <div class="dashboard-section">
-                <h2 class="mb-4 text-primary">Admin Dashboard</h2>
-                
-                <div class="row mb-4">
-                    <div class="col-md-4">
-                        <div class="card bg-primary text-white shadow-sm text-center">
-                            <div class="card-body">
-                                <h5 class="card-title text-uppercase font-weight-bold">Total Employees</h5>
-                                <p class="display-4 font-weight-bold mb-0"><%= employeeCount %></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <% if (currentURL.contains("dashboard-router")) { %>
+        
+        <% if (sAdmin || sHR || sManager || sEmployee) { %>
+            <div class="alert alert-info">
+                <h4>Redirecting to your dashboard...</h4>
+                <p>Please wait while we take you to your dedicated area.</p>
+            </div>
 
-                <div class="row">
-                    <div class="col-12">
-                        <h4 class="mb-3">Quick Links</h4>
-                        <div class="d-flex flex-wrap gap-2">
-                            <a href="/web/hrms/employee-management" class="btn btn-primary m-1">Employee Management</a>
-                            <a href="/web/hrms/hr-dashboard" class="btn btn-info text-white m-1">HR Dashboard</a>
-                            <a href="/web/hrms/manager-dashboard" class="btn btn-warning text-white m-1">Manager Dashboard</a>
-                            <a href="/web/hrms/employee-dashboard" class="btn btn-success m-1">Employee Dashboard</a>
-                        </div>
+            <script type="text/javascript">
+                (function() {
+                    if (<%= sAdmin %>) {
+                        window.location.href = '/web/hrms/admin-dashboard';
+                    } else if (<%= sHR %>) {
+                        window.location.href = '/web/hrms/hr-dashboard';
+                    } else if (<%= sManager %>) {
+                        window.location.href = '/web/hrms/manager-dashboard';
+                    } else if (<%= sEmployee %>) {
+                        window.location.href = '/web/hrms/employee-dashboard';
+                    }
+                })();
+            </script>
+        <% } else { %>
+            <div class="alert alert-danger">
+                <h4>Access denied.</h4>
+                <p>You do not have a role assigned to view any corporate dashboards. Please contact your system administrator.</p>
+            </div>
+        <% } %>
+
+    <%-- ========================================== --%>
+    <%-- 2. ROUTE: ADMIN DASHBOARD                  --%>
+    <%-- ========================================== --%>
+    <% } else if (currentURL.contains("admin-dashboard")) { %>
+        
+        <h2 class="mb-4">Admin Dashboard</h2>
+        
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Employees</h5>
+                        <p class="card-text display-4"><%= empCount %></p>
                     </div>
                 </div>
             </div>
-        <% } 
-    } %>
-
-    <%-- ========================================== --%>
-    <%-- 2. HR DASHBOARD ROUTING --%>
-    <%-- ========================================== --%>
-    <% if (currentURL.contains("hr-dashboard")) { 
-        authorizationChecked = true;
-        if (sAdmin || sHR) { 
-            hasAccess = true; %>
-            <div class="dashboard-section">
-                <h2 class="mb-4 text-info">HR Dashboard</h2>
-                
-                <div class="row mb-4">
-                    <div class="col-md-4">
-                        <div class="card bg-info text-white shadow-sm text-center">
-                            <div class="card-body">
-                                <h5 class="card-title text-uppercase font-weight-bold">Total Employees</h5>
-                                <p class="display-4 font-weight-bold mb-0"><%= employeeCount %></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-12">
-                        <h4 class="mb-3">Quick Links</h4>
-                        <div class="d-flex flex-wrap gap-2">
-                            <a href="/web/hrms/employee-management" class="btn btn-outline-info m-1">Employee Management</a>
-                            <span class="btn btn-outline-secondary disabled m-1">Attendance Management Placeholder</span>
-                            <span class="btn btn-outline-secondary disabled m-1">Leave Management Placeholder</span>
-                            <span class="btn btn-outline-secondary disabled m-1">Payroll Management Placeholder</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        <% } 
-    } %>
-
-    <%-- ========================================== --%>
-    <%-- 3. MANAGER DASHBOARD ROUTING --%>
-    <%-- ========================================== --%>
-    <% if (currentURL.contains("manager-dashboard")) { 
-        authorizationChecked = true;
-        if (sAdmin || sManager) { 
-            hasAccess = true; %>
-            <div class="dashboard-section">
-                <h2 class="mb-4 text-warning">Manager Dashboard</h2>
-                
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <div class="card shadow-sm h-100 border-left-warning">
-                            <div class="card-body d-flex flex-column justify-content-center align-items-center py-4">
-                                <h5 class="card-title text-muted mb-2">Team Attendance</h5>
-                                <span class="badge badge-warning text-white p-2">Team Attendance Card</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <div class="card shadow-sm h-100 border-left-warning">
-                            <div class="card-body d-flex flex-column justify-content-center align-items-center py-4">
-                                <h5 class="card-title text-muted mb-2">Pending Leave Approvals</h5>
-                                <span class="badge badge-warning text-white p-2">Pending Leave Approvals Card</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <div class="card shadow-sm h-100 border-left-warning">
-                            <div class="card-body d-flex flex-column justify-content-center align-items-center py-4">
-                                <h5 class="card-title text-muted mb-2">Team Reports</h5>
-                                <span class="badge badge-warning text-white p-2">Team Reports Card</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        <% } 
-    } %>
-
-    <%-- ========================================== --%>
-    <%-- 4. EMPLOYEE DASHBOARD ROUTING --%>
-    <%-- ========================================== --%>
-    <% if (currentURL.contains("employee-dashboard")) { 
-        authorizationChecked = true;
-        if (sAdmin || sEmployee) { 
-            hasAccess = true; %>
-            <div class="dashboard-section">
-                <h2 class="mb-4 text-success">Employee Dashboard</h2>
-                
-                <div class="row">
-                    <div class="col-md-3 col-sm-6 mb-3">
-                        <a href="/web/hrms/my-profile" class="text-decoration-none text-dark card-link">
-                            <div class="card shadow-sm text-center h-100 dynamic-hover-card">
-                                <div class="card-body py-4">
-                                    <h5 class="card-title font-weight-bold text-success">My Profile</h5>
-                                    <p class="text-muted small mb-0">My Profile Card</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-3 col-sm-6 mb-3">
-                        <a href="/web/hrms/my-attendance" class="text-decoration-none text-dark card-link">
-                            <div class="card shadow-sm text-center h-100 dynamic-hover-card">
-                                <div class="card-body py-4">
-                                    <h5 class="card-title font-weight-bold text-success">My Attendance</h5>
-                                    <p class="text-muted small mb-0">My Attendance Card</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-3 col-sm-6 mb-3">
-                        <a href="/web/hrms/my-leaves" class="text-decoration-none text-dark card-link">
-                            <div class="card shadow-sm text-center h-100 dynamic-hover-card">
-                                <div class="card-body py-4">
-                                    <h5 class="card-title font-weight-bold text-success">My Leaves</h5>
-                                    <p class="text-muted small mb-0">My Leaves Card</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-3 col-sm-6 mb-3">
-                        <a href="/web/hrms/my-payslips" class="text-decoration-none text-dark card-link">
-                            <div class="card shadow-sm text-center h-100 dynamic-hover-card">
-                                <div class="card-body py-4">
-                                    <h5 class="card-title font-weight-bold text-success">My Payslips</h5>
-                                    <p class="text-muted small mb-0">My Payslips Card</p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        <% } 
-    } %>
-
-    <%-- ========================================== --%>
-    <%-- FALLBACK: ACCESS DENIED / UNKNOWN STATE --%>
-    <%-- ========================================== --%>
-    <% if (authorizationChecked && !hasAccess) { %>
-        <div class="alert alert-danger role-security-alert my-4" role="alert">
-            <strong class="lead font-weight-bold">Access denied for this dashboard.</strong>
         </div>
+
+        <h3 class="mb-3">Quick Links</h3>
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Employee Management</h5>
+                        <a href="/web/hrms/employee-management" class="btn btn-outline-primary mt-2">Go to Module</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">HR Dashboard</h5>
+                        <a href="/web/hrms/hr-dashboard" class="btn btn-outline-primary mt-2">View Dashboard</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Manager Dashboard</h5>
+                        <a href="/web/hrms/manager-dashboard" class="btn btn-outline-primary mt-2">View Dashboard</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Employee Dashboard</h5>
+                        <a href="/web/hrms/employee-dashboard" class="btn btn-outline-primary mt-2">View Dashboard</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <%-- ========================================== --%>
+    <%-- 3. ROUTE: HR DASHBOARD                     --%>
+    <%-- ========================================== --%>
+    <% } else if (currentURL.contains("hr-dashboard")) { %>
+        
+        <h2 class="mb-4">HR Dashboard</h2>
+        
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card text-white bg-info mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Employees</h5>
+                        <p class="card-text display-4"><%= empCount %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="mb-3">Quick Links</h3>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Employee Management</h5>
+                        <a href="/web/hrms/employee-management" class="btn btn-outline-info mt-2">Manage</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Department Management</h5>
+                        <a href="/web/hrms/department-management" class="btn btn-outline-info mt-2">Manage</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Designation Management</h5>
+                        <a href="/web/hrms/designation-management" class="btn btn-outline-info mt-2">Manage</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <%-- ========================================== --%>
+    <%-- 4. ROUTE: MANAGER DASHBOARD                --%>
+    <%-- ========================================== --%>
+    <% } else if (currentURL.contains("manager-dashboard")) { %>
+        
+        <h2 class="mb-4">Manager Dashboard</h2>
+        
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="card text-white bg-success h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Team Attendance</h5>
+                        <p class="card-text">Monitor check-ins, check-outs, and daily operational presence tracking.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card text-white bg-warning h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Pending Leave Approvals</h5>
+                        <p class="card-text">Review, authorize, or deny incoming time-off requests submitted by staff.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card text-white bg-secondary h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Team Reports</h5>
+                        <p class="card-text">Generate aggregate metrics on resource bandwidth and departmental production.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <%-- ========================================== --%>
+    <%-- 5. ROUTE: EMPLOYEE DASHBOARD               --%>
+    <%-- ========================================== --%>
+    <% } else if (currentURL.contains("employee-dashboard")) { %>
+        
+        <h2 class="mb-4">Employee Dashboard</h2>
+        
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <div class="card h-100 border-dark text-center shadow-sm">
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <div>
+                            <h5 class="card-title font-weight-bold">My Profile</h5>
+                            <p class="card-text text-muted small">Update your dynamic corporate information records.</p>
+                        </div>
+                        <a href="/web/hrms/my-profile" class="btn btn-dark btn-block mt-3">Open Profile</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card h-100 border-dark text-center shadow-sm">
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <div>
+                            <h5 class="card-title font-weight-bold">My Attendance</h5>
+                            <p class="card-text text-muted small">View daily history logs and total work time tracking.</p>
+                        </div>
+                        <a href="/web/hrms/my-attendance" class="btn btn-dark btn-block mt-3">Open Attendance</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card h-100 border-dark text-center shadow-sm">
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <div>
+                            <h5 class="card-title font-weight-bold">My Leaves</h5>
+                            <p class="card-text text-muted small">Request time-off allocations or check balances.</p>
+                        </div>
+                        <a href="/web/hrms/my-leaves" class="btn btn-dark btn-block mt-3">Open Leaves</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card h-100 border-dark text-center shadow-sm">
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <div>
+                            <h5 class="card-title font-weight-bold">My Payroll</h5>
+                            <p class="card-text text-muted small">Access salary structures and download monthly slips.</p>
+                        </div>
+                        <a href="/web/hrms/my-payroll" class="btn btn-dark btn-block mt-3">Open Payroll</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <%-- ========================================== --%>
+    <%-- DEFAULT LANDING                            --%>
+    <%-- ========================================== --%>
+    <% } else { %>
+        
+        <div class="jumbotron">
+            <h1 class="display-4">Welcome to the Portal Hub</h1>
+            <p class="lead">Please utilize your system menu pathways or route extensions to interact with HRMS business data layers.</p>
+        </div>
+        
     <% } %>
 
 </div>
-
-<style>
-    /* Keeps styling look clean when wrapped inside an anchor tag */
-    .card-link {
-        display: block;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .card-link:hover {
-        text-decoration: none !important;
-    }
-    .dynamic-hover-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 4px 10px rgba(0,0,0,0.15) !important;
-    }
-</style>
