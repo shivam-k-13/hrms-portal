@@ -313,7 +313,6 @@
         <portlet:renderURL var="employeeSearchURL" />
         
         <form action="${employeeSearchURL}" method="get" class="form-inline my-4 p-3 bg-light border rounded">
-            <%-- Hidden Field: Forces form submission searches back to page 1 --%>
             <input type="hidden" name="<portlet:namespace />pageNumber" value="1" />
             <input type="hidden" name="<portlet:namespace />pageSize" value="<%= currentPageSize %>" />
 
@@ -350,6 +349,7 @@
                     <th>Department</th>
                     <th>Designation</th>
                     <th>Status</th>
+                    <th>View</th> <%-- New Global Column --%>
                     <% if (sManageEmployees) { %>
                         <th>Edit</th>
                         <th>Delete</th>
@@ -360,14 +360,21 @@
                 <% if (employees != null && !employees.isEmpty()) {
                     for (Employee employee : employees) { %>
                         
-                        <portlet:renderURL var="editEmployeeURL">
-                            <portlet:param name="mvcRenderCommandName" value="/employee/edit" />
+                        <portlet:renderURL var="viewEmployeeURL">
+                            <portlet:param name="mvcRenderCommandName" value="/employee/view" />
                             <portlet:param name="employeeId" value="<%= String.valueOf(employee.getEmployeeId()) %>" />
                         </portlet:renderURL>
 
-                        <portlet:actionURL name="/employee/delete" var="deleteEmployeeURL">
-                            <portlet:param name="employeeId" value="<%= String.valueOf(employee.getEmployeeId()) %>" />
-                        </portlet:actionURL>
+                        <% if (sManageEmployees) { %>
+                            <portlet:renderURL var="editEmployeeURL">
+                                <portlet:param name="mvcRenderCommandName" value="/employee/edit" />
+                                <portlet:param name="employeeId" value="<%= String.valueOf(employee.getEmployeeId()) %>" />
+                            </portlet:renderURL>
+
+                            <portlet:actionURL name="/employee/delete" var="deleteEmployeeURL">
+                                <portlet:param name="employeeId" value="<%= String.valueOf(employee.getEmployeeId()) %>" />
+                            </portlet:actionURL>
+                        <% } %>
 
                         <tr>
                             <td><%= employee.getEmployeeCode() %></td>
@@ -378,7 +385,9 @@
                             <td><%= employee.getDepartment() %></td>
                             <td><%= employee.getDesignation() %></td>
                             <td><%= employee.getStatus() %></td>
-                            
+                            <td>
+                                <a href="${viewEmployeeURL}" class="btn btn-info btn-sm">View</a>
+                            </td>
                             <% if (sManageEmployees) { %>
                                 <td>
                                     <a href="${editEmployeeURL}" class="btn btn-secondary btn-sm">Edit</a>
@@ -395,7 +404,8 @@
                     <% }
                 } else { %>
                     <tr>
-                        <td colspan="<%= sManageEmployees ? 10 : 8 %>" class="text-center">No employees found.</td>
+                        <%-- Colspan shifted to 9 / 11 to support the additional View structure element --%>
+                        <td colspan="<%= sManageEmployees ? 11 : 9 %>" class="text-center">No employees found.</td>
                     </tr>
                 <% } %>
             </tbody>
@@ -474,3 +484,4 @@
     <% } %>
 
 </div>
+
