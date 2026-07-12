@@ -1,0 +1,1 @@
+create index IX_D8A753C6 on HRMS_Attendance (employeeId, attendanceDate);

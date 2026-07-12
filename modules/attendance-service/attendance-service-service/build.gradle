@@ -1,0 +1,13 @@
+dependencies {
+	api project(":modules:attendance-service:attendance-service-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.dxp.api"
+	compileOnly project(":modules:employee-service:employee-service-api")
+}
+
+buildService {
+	apiDir = "../attendance-service-api/src/main/java"
+	testDir = "../attendance-service-test/src/testIntegration/java"
+}
+
+group = "com.hrms.attendance"

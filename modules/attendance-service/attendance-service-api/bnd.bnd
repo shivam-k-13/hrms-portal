@@ -1,0 +1,10 @@
+Bundle-Name: attendance-service-api
+Bundle-SymbolicName: com.hrms.attendance.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.hrms.attendance.exception,\
+	com.hrms.attendance.model,\
+	com.hrms.attendance.service,\
+	com.hrms.attendance.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../attendance-service-service/service.xml

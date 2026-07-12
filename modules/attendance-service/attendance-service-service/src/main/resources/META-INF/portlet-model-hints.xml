@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.hrms.attendance.model.Attendance">
+		<field name="attendanceId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="employeeId" type="long" />
+		<field name="attendanceDate" type="Date" />
+		<field name="checkInTime" type="Date" />
+		<field name="checkOutTime" type="Date" />
+		<field name="checkInIP" type="String" />
+		<field name="checkOutIP" type="String" />
+		<field name="checkInLatitude" type="double" />
+		<field name="checkInLongitude" type="double" />
+		<field name="checkOutLatitude" type="double" />
+		<field name="checkOutLongitude" type="double" />
+		<field name="status" type="String" />
+	</model>
+</model-hints>
