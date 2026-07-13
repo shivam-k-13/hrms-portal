@@ -1,9 +1,8 @@
 package com.hrms.employee.web.action;
 
-import com.hrms.employee.model.Employee;
-import com.hrms.employee.service.EmployeeLocalService;
+import com.hrms.employee.model.Department;
+import com.hrms.employee.service.DepartmentLocalService;
 import com.hrms.employee.web.constants.EmployeeWebPortletKeys;
-
 import com.liferay.counter.kernel.service.CounterLocalService;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
@@ -24,11 +23,11 @@ import jakarta.portlet.ActionResponse;
 @Component(
 	property = {
 		"jakarta.portlet.name=" + EmployeeWebPortletKeys.EMPLOYEEWEB,
-		"mvc.command.name=/employee/add"
+		"mvc.command.name=/department/add"
 	},
 	service = MVCActionCommand.class
 )
-public class AddEmployeeMVCActionCommand extends BaseMVCActionCommand {
+public class AddDepartmentMVCActionCommand extends BaseMVCActionCommand {
 
 	@Override
 	protected void doProcessAction(
@@ -40,47 +39,46 @@ public class AddEmployeeMVCActionCommand extends BaseMVCActionCommand {
 			(ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
 		if (!hasManagePermission(themeDisplay)) {
-			System.out.println("ADD EMPLOYEE BLOCKED - USER HAS NO PERMISSION");
+			System.out.println("ADD DEPARTMENT BLOCKED - USER HAS NO PERMISSION");
 			return;
 		}
 
-		long employeeId = _counterLocalService.increment(
-			Employee.class.getName());
+		long departmentId = _counterLocalService.increment(
+			Department.class.getName());
 
-		String employeeCode = ParamUtil.getString(actionRequest, "employeeCode");
-		String firstName = ParamUtil.getString(actionRequest, "firstName");
-		String lastName = ParamUtil.getString(actionRequest, "lastName");
-		String email = ParamUtil.getString(actionRequest, "email");
-		String phoneNumber = ParamUtil.getString(actionRequest, "phoneNumber");
-		String department = ParamUtil.getString(actionRequest, "department");
-		String designation = ParamUtil.getString(actionRequest, "designation");
-		String status = ParamUtil.getString(actionRequest, "status");
+		String departmentCode = ParamUtil.getString(
+			actionRequest, "departmentCode");
 
-		Employee employee =
-			_employeeLocalService.createEmployee(employeeId);
+		String departmentName = ParamUtil.getString(
+			actionRequest, "departmentName");
 
-		employee.setEmployeeCode(employeeCode);
-		employee.setFirstName(firstName);
-		employee.setLastName(lastName);
-		employee.setEmail(email);
-		employee.setPhoneNumber(phoneNumber);
-		employee.setDepartment(department);
-		employee.setDesignation(designation);
-		employee.setStatus(status);
+		String description = ParamUtil.getString(
+			actionRequest, "description");
 
-		employee.setCompanyId(themeDisplay.getCompanyId());
-		employee.setGroupId(themeDisplay.getScopeGroupId());
-		employee.setUserId(themeDisplay.getUserId());
-		employee.setUserName(themeDisplay.getUser().getFullName());
+		String status = ParamUtil.getString(
+			actionRequest, "status");
+
+		Department department =
+			_departmentLocalService.createDepartment(departmentId);
+
+		department.setDepartmentCode(departmentCode);
+		department.setDepartmentName(departmentName);
+		department.setDescription(description);
+		department.setStatus(status);
+
+		department.setGroupId(themeDisplay.getScopeGroupId());
+		department.setCompanyId(themeDisplay.getCompanyId());
+		department.setUserId(themeDisplay.getUserId());
+		department.setUserName(themeDisplay.getUser().getFullName());
 
 		Date now = new Date();
 
-		employee.setCreateDate(now);
-		employee.setModifiedDate(now);
+		department.setCreateDate(now);
+		department.setModifiedDate(now);
 
-		_employeeLocalService.addEmployee(employee);
+		_departmentLocalService.addDepartment(department);
 
-		System.out.println("EMPLOYEE SAVED SUCCESSFULLY");
+		System.out.println("DEPARTMENT SAVED SUCCESSFULLY");
 	}
 
 	private boolean hasManagePermission(ThemeDisplay themeDisplay) {
@@ -104,7 +102,7 @@ public class AddEmployeeMVCActionCommand extends BaseMVCActionCommand {
 	}
 
 	@Reference
-	private EmployeeLocalService _employeeLocalService;
+	private DepartmentLocalService _departmentLocalService;
 
 	@Reference
 	private CounterLocalService _counterLocalService;

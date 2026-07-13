@@ -4,7 +4,6 @@ import com.hrms.employee.model.Employee;
 import com.hrms.employee.service.EmployeeLocalService;
 import com.hrms.employee.web.constants.EmployeeWebPortletKeys;
 
-import com.liferay.counter.kernel.service.CounterLocalService;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
@@ -12,8 +11,6 @@ import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
-
-import java.util.Date;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -24,11 +21,11 @@ import jakarta.portlet.ActionResponse;
 @Component(
 	property = {
 		"jakarta.portlet.name=" + EmployeeWebPortletKeys.EMPLOYEEWEB,
-		"mvc.command.name=/employee/add"
+		"mvc.command.name=/employee/update"
 	},
 	service = MVCActionCommand.class
 )
-public class AddEmployeeMVCActionCommand extends BaseMVCActionCommand {
+public class UpdateEmployeeMVCActionCommand extends BaseMVCActionCommand {
 
 	@Override
 	protected void doProcessAction(
@@ -40,47 +37,41 @@ public class AddEmployeeMVCActionCommand extends BaseMVCActionCommand {
 			(ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
 		if (!hasManagePermission(themeDisplay)) {
-			System.out.println("ADD EMPLOYEE BLOCKED - USER HAS NO PERMISSION");
+			System.out.println("UPDATE EMPLOYEE BLOCKED - USER HAS NO PERMISSION");
 			return;
 		}
 
-		long employeeId = _counterLocalService.increment(
-			Employee.class.getName());
+		long employeeId = ParamUtil.getLong(actionRequest, "employeeId");
 
-		String employeeCode = ParamUtil.getString(actionRequest, "employeeCode");
-		String firstName = ParamUtil.getString(actionRequest, "firstName");
-		String lastName = ParamUtil.getString(actionRequest, "lastName");
-		String email = ParamUtil.getString(actionRequest, "email");
-		String phoneNumber = ParamUtil.getString(actionRequest, "phoneNumber");
-		String department = ParamUtil.getString(actionRequest, "department");
-		String designation = ParamUtil.getString(actionRequest, "designation");
-		String status = ParamUtil.getString(actionRequest, "status");
+		Employee employee = _employeeLocalService.getEmployee(employeeId);
 
-		Employee employee =
-			_employeeLocalService.createEmployee(employeeId);
+		employee.setEmployeeCode(
+			ParamUtil.getString(actionRequest, "employeeCode"));
 
-		employee.setEmployeeCode(employeeCode);
-		employee.setFirstName(firstName);
-		employee.setLastName(lastName);
-		employee.setEmail(email);
-		employee.setPhoneNumber(phoneNumber);
-		employee.setDepartment(department);
-		employee.setDesignation(designation);
-		employee.setStatus(status);
+		employee.setFirstName(
+			ParamUtil.getString(actionRequest, "firstName"));
 
-		employee.setCompanyId(themeDisplay.getCompanyId());
-		employee.setGroupId(themeDisplay.getScopeGroupId());
-		employee.setUserId(themeDisplay.getUserId());
-		employee.setUserName(themeDisplay.getUser().getFullName());
+		employee.setLastName(
+			ParamUtil.getString(actionRequest, "lastName"));
 
-		Date now = new Date();
+		employee.setEmail(
+			ParamUtil.getString(actionRequest, "email"));
 
-		employee.setCreateDate(now);
-		employee.setModifiedDate(now);
+		employee.setPhoneNumber(
+			ParamUtil.getString(actionRequest, "phoneNumber"));
 
-		_employeeLocalService.addEmployee(employee);
+		employee.setDepartment(
+			ParamUtil.getString(actionRequest, "department"));
 
-		System.out.println("EMPLOYEE SAVED SUCCESSFULLY");
+		employee.setDesignation(
+			ParamUtil.getString(actionRequest, "designation"));
+
+		employee.setStatus(
+			ParamUtil.getString(actionRequest, "status"));
+
+		_employeeLocalService.updateEmployee(employee);
+
+		System.out.println("EMPLOYEE UPDATED : " + employeeId);
 	}
 
 	private boolean hasManagePermission(ThemeDisplay themeDisplay) {
@@ -105,9 +96,6 @@ public class AddEmployeeMVCActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	private EmployeeLocalService _employeeLocalService;
-
-	@Reference
-	private CounterLocalService _counterLocalService;
 
 	@Reference
 	private RoleLocalService _roleLocalService;
