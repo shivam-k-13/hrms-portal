@@ -1,0 +1,12 @@
+dependencies {
+	api project(":modules:ai-assistance:ai-assistance-service:ai-assistance-service-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.dxp.api"
+}
+
+buildService {
+	apiDir = "../ai-assistance-service-api/src/main/java"
+	testDir = "../ai-assistance-service-test/src/testIntegration/java"
+}
+
+group = "ai.assistance.service"

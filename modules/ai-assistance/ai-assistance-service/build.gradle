@@ -1,0 +1,6 @@
+tasks.register("deploy") {
+    dependsOn(
+        ":modules:ai-assistance:ai-assistance-service:ai-assistance-service-api:deploy",
+        ":modules:ai-assistance:ai-assistance-service:ai-assistance-service-service:deploy"
+    )
+}
