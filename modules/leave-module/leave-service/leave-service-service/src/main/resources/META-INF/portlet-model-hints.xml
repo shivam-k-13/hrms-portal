@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.hrms.leave.model.LeaveRequest">
+		<field name="uuid" type="String" />
+		<field name="leaveRequestId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="employeeId" type="long" />
+		<field name="leaveType" type="String" />
+		<field name="fromDate" type="Date" />
+		<field name="toDate" type="Date" />
+		<field name="reason" type="String" />
+		<field name="status" type="String" />
+		<field name="approverUserId" type="long" />
+		<field name="approverComments" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+	</model>
+</model-hints>

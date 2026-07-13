@@ -14,7 +14,8 @@
             <p>
                 Upload HR policy documents and ask questions about attendance,
                 leave, training, payroll, and onboarding.
-            </p>
+            </p>k
+            
         </div>
         <div class="hrms-ai-hero-icon">🤖</div>
     </div>

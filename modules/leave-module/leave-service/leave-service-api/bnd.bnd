@@ -1,0 +1,10 @@
+Bundle-Name: leave-service-api
+Bundle-SymbolicName: com.hrms.leave.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.hrms.leave.exception,\
+	com.hrms.leave.model,\
+	com.hrms.leave.service,\
+	com.hrms.leave.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../leave-service-service/service.xml

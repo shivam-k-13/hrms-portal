@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.4.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_4_0.dtd">
+
+<service-builder dependency-injector="ds" package-path="com.hrms.leave">
+	<namespace>HRMS</namespace>
+
+	<entity
+		name="LeaveRequest"
+		local-service="true"
+		remote-service="false"
+		uuid="true"
+	>
+		<column name="leaveRequestId" type="long" primary="true" />
+
+		<column name="groupId" type="long" />
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+
+		<column name="employeeId" type="long" />
+
+		<column name="leaveType" type="String" />
+		<column name="fromDate" type="Date" />
+		<column name="toDate" type="Date" />
+		<column name="reason" type="String" />
+		<column name="status" type="String" />
+
+		<column name="approverUserId" type="long" />
+		<column name="approverComments" type="String" />
+
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<order by="desc">
+			<order-column name="createDate" />
+		</order>
+
+		<finder name="EmployeeId" return-type="Collection">
+			<finder-column name="employeeId" />
+		</finder>
+
+		<finder name="Status" return-type="Collection">
+			<finder-column name="status" />
+		</finder>
+
+		<finder name="EmployeeId_Status" return-type="Collection">
+			<finder-column name="employeeId" />
+			<finder-column name="status" />
+		</finder>
+	</entity>
+</service-builder>
