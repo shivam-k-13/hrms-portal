@@ -204,6 +204,9 @@ public interface EmployeeLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Employee getEmployee(long employeeId) throws PortalException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public Employee getEmployeeByUserId(long userId) throws PortalException;
+
 	/**
 	 * Returns a range of all the employees.
 	 *
@@ -258,4 +261,4 @@ public interface EmployeeLocalService
 	public Employee updateEmployee(Employee employee);
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1425108222
+// LIFERAY-SERVICE-BUILDER-HASH:1663251481

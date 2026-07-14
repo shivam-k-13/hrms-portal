@@ -219,6 +219,12 @@ public class EmployeeLocalServiceUtil {
 		return getService().getEmployee(employeeId);
 	}
 
+	public static Employee getEmployeeByUserId(long userId)
+		throws PortalException {
+
+		return getService().getEmployeeByUserId(userId);
+	}
+
 	/**
 	 * Returns a range of all the employees.
 	 *
@@ -291,4 +297,4 @@ public class EmployeeLocalServiceUtil {
 			EmployeeLocalServiceUtil.class, EmployeeLocalService.class);
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1464381316
+// LIFERAY-SERVICE-BUILDER-HASH:-312123970

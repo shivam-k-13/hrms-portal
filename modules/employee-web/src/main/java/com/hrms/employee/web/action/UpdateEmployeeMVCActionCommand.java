@@ -5,9 +5,11 @@ import com.hrms.employee.service.EmployeeLocalService;
 import com.hrms.employee.web.constants.EmployeeWebPortletKeys;
 
 import com.liferay.portal.kernel.model.Role;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.RoleLocalService;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -54,8 +56,8 @@ public class UpdateEmployeeMVCActionCommand extends BaseMVCActionCommand {
 		employee.setLastName(
 			ParamUtil.getString(actionRequest, "lastName"));
 
-		employee.setEmail(
-			ParamUtil.getString(actionRequest, "email"));
+		String email = ParamUtil.getString(actionRequest, "email");
+		employee.setEmail(email);
 
 		employee.setPhoneNumber(
 			ParamUtil.getString(actionRequest, "phoneNumber"));
@@ -68,6 +70,22 @@ public class UpdateEmployeeMVCActionCommand extends BaseMVCActionCommand {
 
 		employee.setStatus(
 			ParamUtil.getString(actionRequest, "status"));
+
+		// --- DYNAMICALLY RE-ALIGN USER ID ON UPDATE ---
+		long targetUserId = 0;
+		String targetUserName = "";
+
+		try {
+			User targetUser = _userLocalService.getUserByEmailAddress(themeDisplay.getCompanyId(), email);
+			targetUserId = targetUser.getUserId();
+			targetUserName = targetUser.getFullName();
+		} catch (Exception e) {
+			System.out.println("WARNING ON UPDATE: No Liferay login account found for email: " + email);
+		}
+
+		employee.setUserId(targetUserId);
+		employee.setUserName(targetUserName);
+		// ----------------------------------------------
 
 		_employeeLocalService.updateEmployee(employee);
 
@@ -99,5 +117,8 @@ public class UpdateEmployeeMVCActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	private RoleLocalService _roleLocalService;
+
+	@Reference
+	private UserLocalService _userLocalService;
 
 }

@@ -241,6 +241,13 @@ public class EmployeeLocalServiceWrapper
 		return _employeeLocalService.getEmployee(employeeId);
 	}
 
+	@Override
+	public com.hrms.employee.model.Employee getEmployeeByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _employeeLocalService.getEmployeeByUserId(userId);
+	}
+
 	/**
 	 * Returns a range of all the employees.
 	 *
@@ -332,4 +339,4 @@ public class EmployeeLocalServiceWrapper
 	private EmployeeLocalService _employeeLocalService;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1768792936
+// LIFERAY-SERVICE-BUILDER-HASH:1820421030
