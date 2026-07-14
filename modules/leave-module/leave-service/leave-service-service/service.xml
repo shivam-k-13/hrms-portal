@@ -47,5 +47,7 @@
 			<finder-column name="employeeId" />
 			<finder-column name="status" />
 		</finder>
+		
+		{/* The duplicate EmployeeId finder block that was here has been removed */}
 	</entity>
 </service-builder>

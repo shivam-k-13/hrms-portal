@@ -335,6 +335,14 @@ public class LeaveRequestLocalServiceWrapper
 		return _leaveRequestLocalService.getLeaveRequests(start, end);
 	}
 
+	@Override
+	public java.util.List<com.hrms.leave.model.LeaveRequest>
+		getLeaveRequestsByEmployeeId(long employeeId, int start, int end) {
+
+		return _leaveRequestLocalService.getLeaveRequestsByEmployeeId(
+			employeeId, start, end);
+	}
+
 	/**
 	 * Returns all the leave requests matching the UUID and company.
 	 *
@@ -379,6 +387,12 @@ public class LeaveRequestLocalServiceWrapper
 	@Override
 	public int getLeaveRequestsCount() {
 		return _leaveRequestLocalService.getLeaveRequestsCount();
+	}
+
+	@Override
+	public int getLeaveRequestsCountByEmployeeId(long employeeId) {
+		return _leaveRequestLocalService.getLeaveRequestsCountByEmployeeId(
+			employeeId);
 	}
 
 	@Override
@@ -462,4 +476,4 @@ public class LeaveRequestLocalServiceWrapper
 	private LeaveRequestLocalService _leaveRequestLocalService;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1761839140
+// LIFERAY-SERVICE-BUILDER-HASH:1427945110

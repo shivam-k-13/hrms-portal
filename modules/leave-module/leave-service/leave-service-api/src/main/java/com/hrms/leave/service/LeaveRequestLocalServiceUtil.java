@@ -297,6 +297,13 @@ public class LeaveRequestLocalServiceUtil {
 		return getService().getLeaveRequests(start, end);
 	}
 
+	public static List<LeaveRequest> getLeaveRequestsByEmployeeId(
+		long employeeId, int start, int end) {
+
+		return getService().getLeaveRequestsByEmployeeId(
+			employeeId, start, end);
+	}
+
 	/**
 	 * Returns all the leave requests matching the UUID and company.
 	 *
@@ -335,6 +342,10 @@ public class LeaveRequestLocalServiceUtil {
 	 */
 	public static int getLeaveRequestsCount() {
 		return getService().getLeaveRequestsCount();
+	}
+
+	public static int getLeaveRequestsCountByEmployeeId(long employeeId) {
+		return getService().getLeaveRequestsCountByEmployeeId(employeeId);
 	}
 
 	public static List<LeaveRequest> getLeavesByEmployeeId(long employeeId) {
@@ -394,4 +405,4 @@ public class LeaveRequestLocalServiceUtil {
 			LeaveRequestLocalServiceUtil.class, LeaveRequestLocalService.class);
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1495692235
+// LIFERAY-SERVICE-BUILDER-HASH:-579549089

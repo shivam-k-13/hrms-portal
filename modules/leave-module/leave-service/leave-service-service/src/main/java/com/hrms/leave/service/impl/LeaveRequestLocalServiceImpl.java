@@ -164,5 +164,16 @@ public class LeaveRequestLocalServiceImpl
 
 	private static final Set<String> _allowedLeaveTypes = Set.of(
 		"CASUAL", "EARNED", "LOP", "SICK");
+	
+	public List<LeaveRequest> getLeaveRequestsByEmployeeId(
+		    long employeeId, int start, int end) {
+
+		    return leaveRequestPersistence.findByEmployeeId(
+		        employeeId, start, end);
+		}
+
+		public int getLeaveRequestsCountByEmployeeId(long employeeId) {
+		    return leaveRequestPersistence.countByEmployeeId(employeeId);
+		}
 
 }
