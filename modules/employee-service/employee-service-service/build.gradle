@@ -1,4 +1,4 @@
-dependencies {
+ dependencies {
 	api project(":modules:employee-service:employee-service-api")
 
 	compileOnly group: "com.liferay.portal", name: "release.dxp.api"

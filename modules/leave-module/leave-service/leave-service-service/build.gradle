@@ -1,6 +1,6 @@
 dependencies {
 	api project(":modules:leave-module:leave-service:leave-service-api")
-
+	compileOnly project(":modules:employee-service:employee-service-api")
 	compileOnly group: "com.liferay.portal", name: "release.dxp.api"
 }
 
@@ -10,3 +10,4 @@ buildService {
 }
 
 group = "com.hrms.leave"
+

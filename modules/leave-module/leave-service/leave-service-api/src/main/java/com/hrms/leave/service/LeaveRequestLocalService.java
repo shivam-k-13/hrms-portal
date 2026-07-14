@@ -264,6 +264,10 @@ public interface LeaveRequestLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<LeaveRequest> getLeaveRequests(int start, int end);
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<LeaveRequest> getLeaveRequestsByEmployeeId(
+		long employeeId, int start, int end);
+
 	/**
 	 * Returns all the leave requests matching the UUID and company.
 	 *
@@ -297,6 +301,9 @@ public interface LeaveRequestLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getLeaveRequestsCount();
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int getLeaveRequestsCountByEmployeeId(long employeeId);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<LeaveRequest> getLeavesByEmployeeId(long employeeId);
@@ -337,4 +344,4 @@ public interface LeaveRequestLocalService
 	public LeaveRequest updateLeaveRequest(LeaveRequest leaveRequest);
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:261789562
+// LIFERAY-SERVICE-BUILDER-HASH:1306096972
