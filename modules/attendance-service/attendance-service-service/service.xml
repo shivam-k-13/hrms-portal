@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.4.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_4_0.dtd">
+
+<service-builder package-path="com.hrms.attendance">
+    <namespace>HRMS</namespace>
+    
+    <entity name="Attendance" local-service="true" remote-service="true">
+        <!-- Primary Key -->
+        <column name="attendanceId" type="long" primary="true" />
+        
+        <!-- Standard Liferay Audit Fields -->
+        <column name="groupId" type="long" />
+        <column name="companyId" type="long" />
+        <column name="userId" type="long" />
+        <column name="createDate" type="Date" />
+        <column name="modifiedDate" type="Date" />
+
+        <!-- Foreign Key to Employee Module -->
+        <column name="employeeId" type="long" />
+
+        <!-- Core Attendance Fields -->
+        <column name="attendanceDate" type="Date" />
+        <column name="checkInTime" type="Date" />
+        <column name="checkOutTime" type="Date" />
+        <column name="checkInIP" type="String" />
+        <column name="checkOutIP" type="String" />
+        <column name="checkInLatitude" type="double" />
+        <column name="checkInLongitude" type="double" />
+        <column name="checkOutLatitude" type="double" />
+        <column name="checkOutLongitude" type="double" />
+        <column name="status" type="String" />
+
+        <!-- Finders for fetching data -->
+        <finder name="EmployeeId" return-type="Collection">
+            <finder-column name="employeeId" />
+        </finder>
+        
+        <!-- Crucial for Check-Out logic: find today's existing record -->
+        <finder name="EmployeeAndDate" return-type="Attendance">
+            <finder-column name="employeeId" />
+            <finder-column name="attendanceDate" />
+        </finder>
+    </entity>
+</service-builder>

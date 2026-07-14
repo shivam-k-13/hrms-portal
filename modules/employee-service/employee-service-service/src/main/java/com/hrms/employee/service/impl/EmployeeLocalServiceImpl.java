@@ -19,5 +19,10 @@ import org.osgi.service.component.annotations.Component;
 	service = AopService.class
 )
 public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
+
+	public com.hrms.employee.model.Employee getEmployeeByUserId(long userId) throws com.liferay.portal.kernel.exception.PortalException {
+		return employeePersistence.findByUserId(userId);
+	}
+
 }
 // LIFERAY-SERVICE-BUILDER-HASH:241932444

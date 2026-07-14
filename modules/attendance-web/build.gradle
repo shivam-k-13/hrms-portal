@@ -1,0 +1,11 @@
+dependencies {
+    // This single line automatically provides all the correct Jakarta libraries for Liferay 2026
+    compileOnly group: "com.liferay.portal", name: "release.dxp.api"
+    
+    // Your backend links
+    compileOnly project(":modules:attendance-service:attendance-service-api")
+    //compileOnly project(":modules:employee-service:employee-service-api")
+    compileOnly project(":modules:employee-service:employee-service-api")
+
+    cssBuilder group: "com.liferay", name: "com.liferay.css.builder", version: "3.1.4"
+}

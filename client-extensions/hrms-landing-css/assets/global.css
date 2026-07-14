@@ -1,0 +1,31 @@
+/* LandingPage already has its own complete fragment header. */
+
+#banner,
+header#banner,
+.portlet-boundary_com_liferay_site_navigation_menu_web_portlet_SiteNavigationMenuPortlet_,
+.site-navigation,
+.navigation-bar {
+	display: none !important;
+}
+
+#content,
+#main-content,
+.portlet-layout {
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+.portlet,
+.portlet-content,
+.portlet-content-container {
+	background: transparent !important;
+	border: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+/* Keep Liferay owner control toolbar available during development. */
+.control-menu-container,
+.control-menu {
+	display: block;
+}

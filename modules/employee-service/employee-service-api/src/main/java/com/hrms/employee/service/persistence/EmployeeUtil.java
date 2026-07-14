@@ -112,6 +112,62 @@ public class EmployeeUtil {
 	}
 
 	/**
+	 * Returns the employee where userId = &#63; or throws a <code>NoSuchEmployeeException</code> if it could not be found.
+	 *
+	 * @param userId the user ID
+	 * @return the matching employee
+	 * @throws NoSuchEmployeeException if a matching employee could not be found
+	 */
+	public static Employee findByUserId(long userId)
+		throws com.hrms.employee.exception.NoSuchEmployeeException {
+
+		return getPersistence().findByUserId(userId);
+	}
+
+	/**
+	 * Returns the employee where userId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param userId the user ID
+	 * @return the matching employee, or <code>null</code> if a matching employee could not be found
+	 */
+	public static Employee fetchByUserId(long userId) {
+		return getPersistence().fetchByUserId(userId);
+	}
+
+	/**
+	 * Returns the employee where userId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param userId the user ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching employee, or <code>null</code> if a matching employee could not be found
+	 */
+	public static Employee fetchByUserId(long userId, boolean useFinderCache) {
+		return getPersistence().fetchByUserId(userId, useFinderCache);
+	}
+
+	/**
+	 * Removes the employee where userId = &#63; from the database.
+	 *
+	 * @param userId the user ID
+	 * @return the employee that was removed
+	 */
+	public static Employee removeByUserId(long userId)
+		throws com.hrms.employee.exception.NoSuchEmployeeException {
+
+		return getPersistence().removeByUserId(userId);
+	}
+
+	/**
+	 * Returns the number of employees where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the number of matching employees
+	 */
+	public static int countByUserId(long userId) {
+		return getPersistence().countByUserId(userId);
+	}
+
+	/**
 	 * Caches the employee in the entity cache if it is enabled.
 	 *
 	 * @param employee the employee
@@ -269,4 +325,4 @@ public class EmployeeUtil {
 	private static volatile EmployeePersistence _persistence;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1964269472
+// LIFERAY-SERVICE-BUILDER-HASH:-1151178215

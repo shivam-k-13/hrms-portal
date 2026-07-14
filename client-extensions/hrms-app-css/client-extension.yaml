@@ -1,0 +1,8 @@
+assemble:
+  - from: assets
+    into: static
+
+hrms-app-css:
+  name: HRMS Application CSS
+  type: globalCSS
+  url: global.css

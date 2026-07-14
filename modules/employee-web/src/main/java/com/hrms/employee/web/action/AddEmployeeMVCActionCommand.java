@@ -6,9 +6,11 @@ import com.hrms.employee.web.constants.EmployeeWebPortletKeys;
 
 import com.liferay.counter.kernel.service.CounterLocalService;
 import com.liferay.portal.kernel.model.Role;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.RoleLocalService;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -70,8 +72,22 @@ public class AddEmployeeMVCActionCommand extends BaseMVCActionCommand {
 
 		employee.setCompanyId(themeDisplay.getCompanyId());
 		employee.setGroupId(themeDisplay.getScopeGroupId());
-		employee.setUserId(themeDisplay.getUserId());
-		employee.setUserName(themeDisplay.getUser().getFullName());
+
+		// --- NEW ID LOOKUP LOGIC ---
+		long targetUserId = 0;
+		String targetUserName = "";
+
+		try {
+			User targetUser = _userLocalService.getUserByEmailAddress(themeDisplay.getCompanyId(), email);
+			targetUserId = targetUser.getUserId();
+			targetUserName = targetUser.getFullName();
+		} catch (Exception e) {
+			System.out.println("WARNING: No Liferay login account found for email: " + email);
+		}
+
+		employee.setUserId(targetUserId);
+		employee.setUserName(targetUserName);
+		// ---------------------------
 
 		Date now = new Date();
 
@@ -111,5 +127,8 @@ public class AddEmployeeMVCActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	private RoleLocalService _roleLocalService;
+
+	@Reference
+	private UserLocalService _userLocalService;
 
 }

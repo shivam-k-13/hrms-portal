@@ -25,6 +25,7 @@
 		<column name="userName" type="String" />
 		<column name="createDate" type="Date" />
 		<column name="modifiedDate" type="Date" />
+		<finder name="UserId" return-type="Employee" unique="true"><finder-column name="userId" /></finder>
 	</entity>
 	<entity local-service="true" name="Department"
 		remote-service="false">

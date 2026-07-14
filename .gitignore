@@ -48,3 +48,6 @@ tomcat/
 
 # IDE
 bin/
+
+gradle.properties
+gradle/wrapper/gradle-wrapper.properties
