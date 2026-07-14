@@ -97,8 +97,8 @@
 
 <script>
     // System Constants for Geofencing
-    const CAMPUS_LAT = 12.82816;
-    const CAMPUS_LNG = 80.224681;
+    const CAMPUS_LAT = 12.852153777008303;
+    const CAMPUS_LNG = 80.227646;
     const MAX_DISTANCE_METERS = 200;
 
     /**

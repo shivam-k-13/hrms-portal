@@ -2,6 +2,8 @@ package com.hrms.attendance.web.command;
 
 import com.hrms.attendance.model.Attendance;
 import com.hrms.attendance.service.AttendanceLocalService;
+import com.hrms.employee.model.Employee;
+import com.hrms.employee.service.EmployeeLocalService;
 import com.liferay.counter.kernel.service.CounterLocalService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -17,7 +19,6 @@ import com.liferay.portal.kernel.util.WebKeys;
 import java.util.Calendar;
 import java.util.Date;
 
-// Correct Liferay 2026 Jakarta Imports
 import jakarta.portlet.ActionRequest;
 import jakarta.portlet.ActionResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,6 +43,9 @@ public class CheckInMVCActionCommand extends BaseMVCActionCommand {
     @Reference
     private CounterLocalService _counterLocalService;
 
+    @Reference
+    private EmployeeLocalService _employeeLocalService;
+
     @Override
     protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
         try {
@@ -54,8 +58,17 @@ public class CheckInMVCActionCommand extends BaseMVCActionCommand {
             double latitude = ParamUtil.getDouble(actionRequest, "latitude");
             double longitude = ParamUtil.getDouble(actionRequest, "longitude");
 
-            // BYPASS: Use Liferay ID directly until Shivam finishes his Employee API
-            long employeeId = liferayUserId; 
+            long employeeId = 0;
+            try {
+                // Real integration: Fetch from Shivam's module using custom impl method
+                Employee employeeRecord = _employeeLocalService.getEmployeeByUserId(liferayUserId);
+                employeeId = employeeRecord.getEmployeeId();
+            } catch (Exception e) {
+                _log.error("No HRMS Employee profile found for Liferay User: " + liferayUserId);
+                SessionErrors.add(actionRequest, "employee-profile-missing");
+                actionResponse.getRenderParameters().setValue("mvcPath", "/view.jsp");
+                return; 
+            }
 
             Calendar cal = Calendar.getInstance();
             cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -82,7 +95,7 @@ public class CheckInMVCActionCommand extends BaseMVCActionCommand {
             _attendanceLocalService.addAttendance(attendance);
 
             SessionMessages.add(actionRequest, "attendance-check-in-success");
-            _log.info("Check-in successful for user: " + liferayUserId);
+            _log.info("Check-in successful for employee: " + employeeId);
 
         } catch (Exception e) {
             _log.error("Error during Check-In", e);

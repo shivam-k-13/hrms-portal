@@ -1,0 +1,12 @@
+dependencies {
+	api project(":modules:leave-module:leave-service:leave-service-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.dxp.api"
+}
+
+buildService {
+	apiDir = "../leave-service-api/src/main/java"
+	testDir = "../leave-service-test/src/testIntegration/java"
+}
+
+group = "com.hrms.leave"

@@ -1,0 +1,7 @@
+Bundle-Name: dashboard-web
+Bundle-SymbolicName: com.hrms.dashboard.web
+Bundle-Version: 1.0.0
+Export-Package: com.hrms.dashboard.web.constants
+Provide-Capability:\
+	liferay.language.resources;\
+		resource.bundle.base.name="content.Language"

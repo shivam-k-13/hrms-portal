@@ -2,6 +2,8 @@ package com.hrms.attendance.web.command;
 
 import com.hrms.attendance.model.Attendance;
 import com.hrms.attendance.service.AttendanceLocalService;
+import com.hrms.employee.model.Employee;
+import com.hrms.employee.service.EmployeeLocalService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
@@ -15,8 +17,8 @@ import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
-// Correct Liferay 2026 Jakarta Imports
 import jakarta.portlet.ActionRequest;
 import jakarta.portlet.ActionResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,6 +40,9 @@ public class CheckOutMVCActionCommand extends BaseMVCActionCommand {
     @Reference
     private AttendanceLocalService _attendanceLocalService;
 
+    @Reference
+    private EmployeeLocalService _employeeLocalService;
+
     @Override
     protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
         try {
@@ -50,31 +55,51 @@ public class CheckOutMVCActionCommand extends BaseMVCActionCommand {
             double latitude = ParamUtil.getDouble(actionRequest, "latitude");
             double longitude = ParamUtil.getDouble(actionRequest, "longitude");
 
-            // BYPASS: Use Liferay ID directly until Shivam finishes his Employee API
-            long employeeId = liferayUserId;
+            long employeeId = 0;
+            try {
+                // Real integration: Fetch from Shivam's module using custom impl method
+                Employee employeeRecord = _employeeLocalService.getEmployeeByUserId(liferayUserId);
+                employeeId = employeeRecord.getEmployeeId();
+            } catch (Exception e) {
+                _log.error("No HRMS Employee profile found for Liferay User: " + liferayUserId);
+                SessionErrors.add(actionRequest, "employee-profile-missing");
+                actionResponse.getRenderParameters().setValue("mvcPath", "/view.jsp");
+                return; 
+            }
 
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-            Date normalizedDate = cal.getTime();
+            Calendar todayCal = Calendar.getInstance();
+            int currentYear = todayCal.get(Calendar.YEAR);
+            int currentDay = todayCal.get(Calendar.DAY_OF_YEAR);
 
-            Attendance attendance = _attendanceLocalService.fetchEmployeeAndDate(employeeId, normalizedDate);
+            List<Attendance> allAttendances = _attendanceLocalService.getAttendances(-1, -1);
+            Attendance todaysAttendance = null;
 
-            if (attendance != null) {
-                attendance.setCheckOutTime(new Date());
-                attendance.setCheckOutIP(ipAddress);
-                attendance.setCheckOutLatitude(latitude);
-                attendance.setCheckOutLongitude(longitude);
+            for (Attendance att : allAttendances) {
+                if (att.getEmployeeId() == employeeId && att.getAttendanceDate() != null) {
+                    Calendar attCal = Calendar.getInstance();
+                    attCal.setTime(att.getAttendanceDate());
+                    
+                    if (attCal.get(Calendar.YEAR) == currentYear && attCal.get(Calendar.DAY_OF_YEAR) == currentDay) {
+                        todaysAttendance = att;
+                        break;
+                    }
+                }
+            }
+
+            if (todaysAttendance != null) {
+                todaysAttendance.setCheckOutTime(new Date());
+                todaysAttendance.setCheckOutIP(ipAddress);
+                todaysAttendance.setCheckOutLatitude(latitude);
+                todaysAttendance.setCheckOutLongitude(longitude);
                 
-                _attendanceLocalService.updateAttendance(attendance);
+                _attendanceLocalService.updateAttendance(todaysAttendance);
 
                 SessionMessages.add(actionRequest, "attendance-check-out-success");
-                _log.info("Check-out successful for user: " + liferayUserId);
+                _log.info("Check-out successful for employee: " + employeeId);
             } else {
-                _log.warn("Check-Out attempted without prior Check-In for user: " + liferayUserId);
+                _log.warn("Attempted check-out without check-in for employee: " + employeeId);
                 SessionErrors.add(actionRequest, "attendance-no-check-in-found");
+                actionResponse.getRenderParameters().setValue("mvcPath", "/view.jsp");
             }
 
         } catch (Exception e) {
