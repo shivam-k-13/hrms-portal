@@ -109,13 +109,11 @@
     <%-- ========================================== --%>
     <% } else if (currentURL.contains("admin-dashboard")) { %>
         
-        <%-- Header Block --%>
         <div class="mb-4">
             <h2 class="text-dark font-weight-bold m-0">Admin Dashboard</h2>
             <p class="text-muted small">Global system infrastructure, entity control, and macro analytics node.</p>
         </div>
         
-        <%-- Main Metrics Grid --%>
         <div class="row mb-4">
             <div class="col-md-4 mb-3">
                 <div class="card hrms-card accent-blue shadow-sm">
@@ -143,7 +141,6 @@
             </div>
         </div>
 
-        <%-- Integration Framework Row --%>
         <div class="row mb-5">
             <div class="col-md-4 mb-3">
                 <div class="card hrms-card accent-purple shadow-sm">
@@ -183,7 +180,6 @@
             </div>
         </div>
 
-        <%-- Administrative Structural Control Center --%>
         <h4 class="mb-3 text-dark font-weight-bold">System Management Navigation</h4>
         <div class="row">
             <div class="col-md-4 mb-3"><a href="/web/hrms/employee-management" class="menu-link shadow-sm"><span>Employee Management</span> <span>&rarr;</span></a></div>
@@ -200,13 +196,11 @@
     <%-- ========================================== --%>
     <% } else if (currentURL.contains("hr-dashboard")) { %>
         
-        <%-- Header Block --%>
         <div class="mb-4">
             <h2 class="text-dark font-weight-bold m-0">HR Dashboard</h2>
             <p class="text-muted small">Operational resource deployment management hub and talent analytics tracking floor.</p>
         </div>
         
-        <%-- Main Metrics Grid --%>
         <div class="row mb-4">
             <div class="col-md-4 mb-3">
                 <div class="card hrms-card accent-blue shadow-sm">
@@ -234,7 +228,6 @@
             </div>
         </div>
 
-        <%-- Integration Framework Row --%>
         <div class="row mb-5">
             <div class="col-md-4 mb-3">
                 <div class="card hrms-card accent-purple shadow-sm">
@@ -274,7 +267,6 @@
             </div>
         </div>
 
-        <%-- HR Operational Links --%>
         <h4 class="mb-3 text-dark font-weight-bold">Human Resources Navigation</h4>
         <div class="row">
             <div class="col-md-3 mb-3"><a href="/web/hrms/employee-management" class="menu-link shadow-sm"><span>Employee Management</span> <span>&rarr;</span></a></div>
@@ -288,13 +280,11 @@
     <%-- ========================================== --%>
     <% } else if (currentURL.contains("manager-dashboard")) { %>
         
-        <%-- Header Block --%>
         <div class="mb-4">
             <h2 class="text-dark font-weight-bold m-0">Manager Dashboard</h2>
             <p class="text-muted small">Departmental overview dashboard monitoring localized operational availability targets.</p>
         </div>
         
-        <%-- Manager Grid Indicators --%>
         <div class="row mb-4">
             <div class="col-md-4 mb-3">
                 <div class="card hrms-card accent-blue shadow-sm">
@@ -331,7 +321,6 @@
             </div>
         </div>
 
-        <%-- Pipeline Integration Warning Note --%>
         <div class="card border-0 shadow-sm rounded-lg bg-light p-4">
             <div class="d-flex align-items-center">
                 <div class="text-warning mr-3" style="font-size: 1.5rem;">&#9888;</div>
@@ -347,13 +336,11 @@
     <%-- ========================================== --%>
     <% } else if (currentURL.contains("employee-dashboard")) { %>
         
-        <%-- Header Block --%>
         <div class="mb-4">
             <h2 class="text-dark font-weight-bold m-0">Employee Dashboard</h2>
             <p class="text-muted small">Personal employee service desk panel monitoring individual logs and compliance data files.</p>
         </div>
         
-        <%-- Self Service Hub Grid Layout --%>
         <div class="row">
             <div class="col-md-3 mb-4">
                 <div class="card hrms-card shadow-sm border-0 h-100">
