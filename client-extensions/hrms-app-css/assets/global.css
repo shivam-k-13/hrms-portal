@@ -1,0 +1,168 @@
+:root {
+	--hrms-primary: #0056b3;
+	--hrms-secondary: #0088cc;
+	--hrms-dark: #0f172a;
+	--hrms-text: #1e293b;
+	--hrms-muted: #64748b;
+	--hrms-background: #f8fafc;
+	--hrms-surface: #ffffff;
+	--hrms-border: #e2e8f0;
+	--hrms-shadow: 0 10px 30px rgba(0, 86, 179, 0.08);
+}
+
+/*
+ * Preserve the existing HRMS logo and Liferay user profile menu.
+ * Hide the large multi-line page navigation.
+ */
+#banner .site-navigation,
+#banner .navigation-bar,
+#banner .navbar-nav:not(.user-personal-bar),
+.portlet-boundary_com_liferay_site_navigation_menu_web_portlet_SiteNavigationMenuPortlet_ {
+	display: none !important;
+}
+
+/* Convert the remaining theme header into a compact application bar. */
+#banner,
+header#banner {
+	background: rgba(255, 255, 255, 0.96) !important;
+	border-bottom: 1px solid var(--hrms-border);
+	box-shadow: 0 5px 20px rgba(15, 23, 42, 0.05);
+	min-height: 72px;
+	padding: 10px 5% !important;
+}
+
+/* Keep logo and profile menu aligned. */
+#banner .container,
+#banner .container-fluid {
+	align-items: center;
+	display: flex;
+	justify-content: space-between;
+	max-width: 100%;
+}
+
+/* Preserve and style the user profile/personal menu. */
+#banner .user-personal-bar,
+#banner .personal-menu-dropdown,
+#banner .user-avatar-link,
+#banner .dropdown-user {
+	display: flex !important;
+	margin-left: auto;
+}
+
+/* Main authenticated page styling. */
+body {
+	background: var(--hrms-background);
+	color: var(--hrms-text);
+}
+
+#content,
+#main-content {
+	background: var(--hrms-background);
+	min-height: calc(100vh - 72px);
+	padding: 24px !important;
+}
+
+.card,
+.hrms-card {
+	background: var(--hrms-surface);
+	border: 1px solid var(--hrms-border);
+	border-radius: 14px !important;
+	box-shadow: var(--hrms-shadow);
+}
+
+.btn {
+	border-radius: 10px;
+	font-weight: 600;
+}
+
+.btn-primary {
+	background: linear-gradient(
+		135deg,
+		var(--hrms-primary),
+		var(--hrms-secondary)
+	);
+	border-color: var(--hrms-primary);
+}
+
+.form-control {
+	border: 1px solid #cbd5e1;
+	border-radius: 10px;
+}
+
+.form-control:focus {
+	border-color: var(--hrms-secondary);
+	box-shadow: 0 0 0 3px rgba(0, 136, 204, 0.15);
+}
+
+.table {
+	background: var(--hrms-surface);
+}
+
+.table thead th {
+	background: #eaf4fc;
+	color: var(--hrms-dark);
+	font-weight: 700;
+}
+
+/* Keep the owner's full Liferay toolbar. */
+.control-menu-container,
+.control-menu {
+	display: block;
+}
+
+/* Other users do not receive this toolbar unless they have Liferay permissions. */
+
+@media (max-width: 767px) {
+	#content,
+	#main-content {
+		padding: 14px !important;
+	}
+
+	#banner,
+	header#banner {
+		padding: 8px 16px !important;
+	}
+}
+/* Compact authenticated HRMS header */
+#banner,
+header#banner {
+	min-height: 64px !important;
+	padding: 8px 4% !important;
+}
+
+#banner .container,
+#banner .container-fluid {
+	min-height: 48px !important;
+	padding-bottom: 0 !important;
+	padding-top: 0 !important;
+}
+
+/* Remove empty theme navigation space */
+#banner nav,
+#banner .site-navigation,
+#banner .navigation-bar {
+	margin: 0 !important;
+	min-height: 0 !important;
+	padding: 0 !important;
+}
+
+/* Reduce space before dashboard content */
+#content,
+#main-content {
+	padding: 12px 24px 24px !important;
+}
+
+/* Reduce dashboard wrapper spacing */
+.hrms-container {
+	margin-top: 0 !important;
+	padding-top: 16px !important;
+}
+
+/* Keep logo and profile aligned vertically */
+#banner .navbar-brand,
+#banner .user-personal-bar,
+#banner .personal-menu-dropdown {
+	align-items: center !important;
+	margin-bottom: 0 !important;
+	margin-top: 0 !important;
+}

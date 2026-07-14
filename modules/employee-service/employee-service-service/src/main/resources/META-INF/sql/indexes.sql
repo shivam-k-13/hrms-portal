@@ -1,0 +1,1 @@
+create unique index IX_2CE657BD on HRMS_Employee (userId);

@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.FinderCache;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.dao.orm.Query;
+import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.SessionFactory;
@@ -82,6 +83,164 @@ public class EmployeePersistenceImpl
 	private FinderPath _finderPathWithPaginationFindAll;
 	private FinderPath _finderPathWithoutPaginationFindAll;
 	private FinderPath _finderPathCountAll;
+	private FinderPath _finderPathFetchByUserId;
+
+	/**
+	 * Returns the employee where userId = &#63; or throws a <code>NoSuchEmployeeException</code> if it could not be found.
+	 *
+	 * @param userId the user ID
+	 * @return the matching employee
+	 * @throws NoSuchEmployeeException if a matching employee could not be found
+	 */
+	@Override
+	public Employee findByUserId(long userId) throws NoSuchEmployeeException {
+		Employee employee = fetchByUserId(userId);
+
+		if (employee == null) {
+			StringBundler sb = new StringBundler(4);
+
+			sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			sb.append("userId=");
+			sb.append(userId);
+
+			sb.append("}");
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(sb.toString());
+			}
+
+			throw new NoSuchEmployeeException(sb.toString());
+		}
+
+		return employee;
+	}
+
+	/**
+	 * Returns the employee where userId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param userId the user ID
+	 * @return the matching employee, or <code>null</code> if a matching employee could not be found
+	 */
+	@Override
+	public Employee fetchByUserId(long userId) {
+		return fetchByUserId(userId, true);
+	}
+
+	/**
+	 * Returns the employee where userId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param userId the user ID
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching employee, or <code>null</code> if a matching employee could not be found
+	 */
+	@Override
+	public Employee fetchByUserId(long userId, boolean useFinderCache) {
+		Object[] finderArgs = null;
+
+		if (useFinderCache) {
+			finderArgs = new Object[] {userId};
+		}
+
+		Object result = null;
+
+		if (useFinderCache) {
+			result = finderCache.getResult(
+				_finderPathFetchByUserId, finderArgs, this);
+		}
+
+		if (result instanceof Employee) {
+			Employee employee = (Employee)result;
+
+			if (userId != employee.getUserId()) {
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_SELECT_EMPLOYEE_WHERE);
+
+			sb.append(_FINDER_COLUMN_USERID_USERID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(userId);
+
+				List<Employee> list = query.list();
+
+				if (list.isEmpty()) {
+					if (useFinderCache) {
+						finderCache.putResult(
+							_finderPathFetchByUserId, finderArgs, list);
+					}
+				}
+				else {
+					Employee employee = list.get(0);
+
+					result = employee;
+
+					cacheResult(employee);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (Employee)result;
+		}
+	}
+
+	/**
+	 * Removes the employee where userId = &#63; from the database.
+	 *
+	 * @param userId the user ID
+	 * @return the employee that was removed
+	 */
+	@Override
+	public Employee removeByUserId(long userId) throws NoSuchEmployeeException {
+		Employee employee = findByUserId(userId);
+
+		return remove(employee);
+	}
+
+	/**
+	 * Returns the number of employees where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @return the number of matching employees
+	 */
+	@Override
+	public int countByUserId(long userId) {
+		Employee employee = fetchByUserId(userId);
+
+		if (employee == null) {
+			return 0;
+		}
+
+		return 1;
+	}
+
+	private static final String _FINDER_COLUMN_USERID_USERID_2 =
+		"employee.userId = ?";
 
 	public EmployeePersistenceImpl() {
 		setModelClass(Employee.class);
@@ -101,6 +260,10 @@ public class EmployeePersistenceImpl
 	public void cacheResult(Employee employee) {
 		entityCache.putResult(
 			EmployeeImpl.class, employee.getPrimaryKey(), employee);
+
+		finderCache.putResult(
+			_finderPathFetchByUserId, new Object[] {employee.getUserId()},
+			employee);
 	}
 
 	private int _valueObjectFinderCacheListThreshold;
@@ -168,6 +331,15 @@ public class EmployeePersistenceImpl
 		for (Serializable primaryKey : primaryKeys) {
 			entityCache.removeResult(EmployeeImpl.class, primaryKey);
 		}
+	}
+
+	protected void cacheUniqueFindersCache(
+		EmployeeModelImpl employeeModelImpl) {
+
+		Object[] args = new Object[] {employeeModelImpl.getUserId()};
+
+		finderCache.putResult(
+			_finderPathFetchByUserId, args, employeeModelImpl);
 	}
 
 	/**
@@ -335,7 +507,10 @@ public class EmployeePersistenceImpl
 			closeSession(session);
 		}
 
-		entityCache.putResult(EmployeeImpl.class, employee, false, true);
+		entityCache.putResult(
+			EmployeeImpl.class, employeeModelImpl, false, true);
+
+		cacheUniqueFindersCache(employeeModelImpl);
 
 		if (isNew) {
 			employee.setNew(false);
@@ -615,6 +790,10 @@ public class EmployeePersistenceImpl
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll",
 			new String[0], new String[0], false);
 
+		_finderPathFetchByUserId = new FinderPath(
+			FINDER_CLASS_NAME_ENTITY, "fetchByUserId",
+			new String[] {Long.class.getName()}, new String[] {"userId"}, true);
+
 		EmployeeUtil.setPersistence(this);
 	}
 
@@ -660,13 +839,22 @@ public class EmployeePersistenceImpl
 	private static final String _SQL_SELECT_EMPLOYEE =
 		"SELECT employee FROM Employee employee";
 
+	private static final String _SQL_SELECT_EMPLOYEE_WHERE =
+		"SELECT employee FROM Employee employee WHERE ";
+
 	private static final String _SQL_COUNT_EMPLOYEE =
 		"SELECT COUNT(employee) FROM Employee employee";
+
+	private static final String _SQL_COUNT_EMPLOYEE_WHERE =
+		"SELECT COUNT(employee) FROM Employee employee WHERE ";
 
 	private static final String _ORDER_BY_ENTITY_ALIAS = "employee.";
 
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY =
 		"No Employee exists with the primary key ";
+
+	private static final String _NO_SUCH_ENTITY_WITH_KEY =
+		"No Employee exists with the key {";
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		EmployeePersistenceImpl.class);
@@ -677,4 +865,4 @@ public class EmployeePersistenceImpl
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1053054791
+// LIFERAY-SERVICE-BUILDER-HASH:-1040397779

@@ -1,0 +1,8 @@
+assemble:
+    - from: assets
+      into: static
+
+hrms-landing-css:
+    name: HRMS Landing CSS
+    type: globalCSS
+    url: global.css
