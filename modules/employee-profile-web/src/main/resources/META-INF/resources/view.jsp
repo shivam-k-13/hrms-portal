@@ -1,88 +1,169 @@
 <%@ include file="/init.jsp" %>
-
-<%-- Imports needed --%>
 <%@ page pageEncoding="UTF-8" %>
 <%@ page import="com.hrms.employee.model.Employee" %>
 
-<%-- Read request attributes --%>
 <%
     Employee employee = (Employee) request.getAttribute("employee");
     String loggedInUserEmail = (String) request.getAttribute("loggedInUserEmail");
-    
-    // Null safety fallback for string rendering
     String userEmail = (loggedInUserEmail != null) ? loggedInUserEmail : "Unknown Email";
 %>
 
-<div class="container-fluid my-4">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
 
-    <%-- If employee is null --%>
-    <% if (employee == null) { %>
-        <div class="alert alert-warning shadow-sm" role="alert">
-            No HRMS employee profile found for logged-in user email: <strong><%= userEmail %></strong>
-        </div>
-    <% } else { %>
-        
-        <%-- If employee is not null --%>
-        <div class="profile-container">
-            <h2 class="mb-4 text-primary">My Profile</h2>
-            
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-light py-3">
-                    <h5 class="card-title text-muted mb-0 font-weight-bold">Personal & Employment Details</h5>
-                </div>
-                <div class="card-body p-0">
-                    <table class="table table-hover mb-0">
-                        <tbody>
-                            <tr>
-                                <th scope="row" class="w-25 border-top-0 bg-light-cell text-muted font-weight-bold">Employee Code</th>
-                                <td class="border-top-0"><%= (employee.getEmployeeCode() != null) ? employee.getEmployeeCode() : "" %></td>
-                            </tr>
-                            <tr>
-                                <th scope="row" class="w-25 bg-light-cell text-muted font-weight-bold">First Name</th>
-                                <td><%= (employee.getFirstName() != null) ? employee.getFirstName() : "" %></td>
-                            </tr>
-                            <tr>
-                                <th scope="row" class="w-25 bg-light-cell text-muted font-weight-bold">Last Name</th>
-                                <td><%= (employee.getLastName() != null) ? employee.getLastName() : "" %></td>
-                            </tr>
-                            <tr>
-                                <th scope="row" class="w-25 bg-light-cell text-muted font-weight-bold">Email</th>
-                                <td><%= (employee.getEmail() != null) ? employee.getEmail() : "" %></td>
-                            </tr>
-                            <tr>
-                                <th scope="row" class="w-25 bg-light-cell text-muted font-weight-bold">Phone Number</th>
-                                <td><%= (employee.getPhoneNumber() != null) ? employee.getPhoneNumber() : "" %></td>
-                            </tr>
-                            <tr>
-                                <th scope="row" class="w-25 bg-light-cell text-muted font-weight-bold">Department</th>
-                                <td><%= (employee.getDepartment() != null) ? employee.getDepartment() : "" %></td>
-                            </tr>
-                            <tr>
-                                <th scope="row" class="w-25 bg-light-cell text-muted font-weight-bold">Designation</th>
-                                <td><%= (employee.getDesignation() != null) ? employee.getDesignation() : "" %></td>
-                            </tr>
-                            <tr>
-                                <th scope="row" class="w-25 bg-light-cell text-muted font-weight-bold">Status</th>
-                                <td>
-                                    <span class="badge badge-secondary p-2">
-                                        <%= (employee.getStatus() != null) ? employee.getStatus() : "" %>
-                                    </span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        
-    <% } %>
+<style type="text/css">
+    .hrms-profile-wrapper {
+        background: #f8fafc;
+        font-family: "Inter", sans-serif;
+        font-size: 15px;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 4rem 2rem;
+        position: relative;
+    }
 
-</div>
+    /* Floating Back Button */
+    .btn-back-float {
+        position: absolute;
+        top: 2rem;
+        left: 2rem;
+        display: inline-flex; 
+        align-items: center; 
+        gap: 0.5rem;
+        background: #ffffff; 
+        color: #0f172a; 
+        border: 1px solid #e2e8f0;
+        padding: 0.6rem 1.2rem; 
+        border-radius: 999px; 
+        font-weight: 700;
+        font-size: 0.9rem; 
+        text-decoration: none; 
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        transition: 0.2s; 
+        z-index: 100;
+    }
+    .btn-back-float:hover { 
+        background: #f1f5f9; 
+        color: #0056b3; 
+        transform: translateX(-4px); 
+    }
 
-<style>
-    /* Light styling polish matching Liferay Lexicon specs */
-    .bg-light-cell {
-        background-color: #f7f8f9;
-        width: 30%;
+    .profile-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 20px;
+        width: 100%;
+        max-width: 900px;
+        box-shadow: 0 15px 40px rgba(0, 86, 179, 0.08);
+        overflow: hidden;
+    }
+
+    .profile-header {
+        background: linear-gradient(135deg, #0056b3 0%, #0088cc 100%);
+        padding: 2.5rem 3rem;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+    }
+    
+    .profile-avatar-large {
+        width: 90px;
+        height: 90px;
+        background: rgba(255,255,255,0.2);
+        border: 4px solid rgba(255,255,255,0.4);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+    }
+
+    .profile-header h2 { margin: 0 0 0.25rem; font-size: 2rem; font-weight: 900; }
+    .profile-header p { margin: 0; font-size: 1rem; color: #eaf4fc; font-weight: 500; }
+
+    .profile-body { padding: 3rem; }
+
+    .detail-table { width: 100%; border-collapse: collapse; }
+    .detail-table th, .detail-table td { padding: 1.25rem 1rem; border-bottom: 1px solid #f1f5f9; text-align: left; }
+    .detail-table th { width: 35%; color: #64748b; font-weight: 600; font-size: 0.95rem; }
+    .detail-table td { color: #0f172a; font-weight: 700; font-size: 1.05rem; }
+    .detail-table tr:last-child th, .detail-table tr:last-child td { border-bottom: none; }
+
+    .status-badge {
+        background: #ecfdf5; color: #047857;
+        padding: 0.4rem 1rem; border-radius: 999px;
+        font-size: 0.85rem; font-weight: 800; display: inline-block;
+        border: 1px solid #a7f3d0;
     }
 </style>
+
+<div class="hrms-profile-wrapper">
+    
+    <!-- Floating Back Button -->
+    <a href="/web/hrms/dashboard-router" class="btn-back-float">
+        <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+    </a>
+
+    <div class="profile-card">
+        <% if (employee == null) { %>
+            <div class="profile-header" style="background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);">
+                <div class="profile-avatar-large"><i class="fa-solid fa-user-xmark"></i></div>
+                <div>
+                    <h2>Profile Not Found</h2>
+                    <p>No records found for <%= userEmail %></p>
+                </div>
+            </div>
+            <div class="profile-body">
+                <p style="color: #64748b;">Please contact your HR administrator to ensure your account is properly linked to an employee profile in the NextGen HRMS system.</p>
+            </div>
+        <% } else { %>
+            
+            <div class="profile-header">
+                <div class="profile-avatar-large"><i class="fa-solid fa-user"></i></div>
+                <div>
+                    <h2><%= (employee.getFirstName() != null) ? employee.getFirstName() : "Employee" %> <%= (employee.getLastName() != null) ? employee.getLastName() : "" %></h2>
+                    <p><%= (employee.getDesignation() != null) ? employee.getDesignation() : "Staff Member" %> &bull; <%= (employee.getDepartment() != null) ? employee.getDepartment() : "General" %></p>
+                </div>
+            </div>
+
+            <div class="profile-body">
+                <h3 style="color: #0f172a; font-weight: 800; margin-bottom: 1.5rem; font-size: 1.3rem;">Employment Details</h3>
+                <table class="detail-table">
+                    <tbody>
+                        <tr>
+                            <th>Employee Code</th>
+                            <td><%= (employee.getEmployeeCode() != null) ? employee.getEmployeeCode() : "N/A" %></td>
+                        </tr>
+                        <tr>
+                            <th>Email Address</th>
+                            <td><%= (employee.getEmail() != null) ? employee.getEmail() : "N/A" %></td>
+                        </tr>
+                        <tr>
+                            <th>Phone Number</th>
+                            <td><%= (employee.getPhoneNumber() != null) ? employee.getPhoneNumber() : "N/A" %></td>
+                        </tr>
+                        <tr>
+                            <th>Department</th>
+                            <td><%= (employee.getDepartment() != null) ? employee.getDepartment() : "N/A" %></td>
+                        </tr>
+                        <tr>
+                            <th>Current Designation</th>
+                            <td><%= (employee.getDesignation() != null) ? employee.getDesignation() : "N/A" %></td>
+                        </tr>
+                        <tr>
+                            <th>Account Status</th>
+                            <td>
+                                <span class="status-badge">
+                                    <%= (employee.getStatus() != null) ? employee.getStatus() : "Active" %>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        <% } %>
+    </div>
+</div>
