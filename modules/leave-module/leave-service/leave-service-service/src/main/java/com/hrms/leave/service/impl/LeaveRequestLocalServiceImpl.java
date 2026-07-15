@@ -18,21 +18,18 @@ import org.osgi.service.component.annotations.Component;
 	property = "model.class.name=com.hrms.leave.model.LeaveRequest",
 	service = AopService.class
 )
-public class LeaveRequestLocalServiceImpl
-	extends LeaveRequestLocalServiceBaseImpl {
+public class LeaveRequestLocalServiceImpl extends LeaveRequestLocalServiceBaseImpl {
 
 	public LeaveRequest applyLeave(
 			long employeeId, String leaveType, Date fromDate, Date toDate,
 			String reason, ServiceContext serviceContext)
 		throws PortalException {
 
-		_validateLeaveRequest(
-			employeeId, leaveType, fromDate, toDate, reason);
+		_validateLeaveRequest(employeeId, leaveType, fromDate, toDate, reason);
 
 		long leaveRequestId = counterLocalService.increment();
 
-		LeaveRequest leaveRequest = leaveRequestPersistence.create(
-			leaveRequestId);
+		LeaveRequest leaveRequest = leaveRequestPersistence.create(leaveRequestId);
 
 		Date now = new Date();
 
@@ -41,16 +38,16 @@ public class LeaveRequestLocalServiceImpl
 		leaveRequest.setUserId(serviceContext.getUserId());
 
 		leaveRequest.setUserName(
-			userLocalService.getUser(
-				serviceContext.getUserId()
-			).getFullName());
+			userLocalService.getUser(serviceContext.getUserId()).getFullName());
 
 		leaveRequest.setEmployeeId(employeeId);
 		leaveRequest.setLeaveType(leaveType);
 		leaveRequest.setFromDate(fromDate);
 		leaveRequest.setToDate(toDate);
 		leaveRequest.setReason(reason.trim());
-		leaveRequest.setStatus("PENDING");
+        
+        // UPGRADED: Set to Tier 1 Approval automatically
+		leaveRequest.setStatus("PENDING_MANAGER");
 
 		leaveRequest.setApproverUserId(0);
 		leaveRequest.setApproverComments("");
@@ -66,21 +63,24 @@ public class LeaveRequestLocalServiceImpl
 			String approverComments)
 		throws PortalException {
 
-		LeaveRequest leaveRequest =
-			leaveRequestPersistence.findByPrimaryKey(leaveRequestId);
+		LeaveRequest leaveRequest = leaveRequestPersistence.findByPrimaryKey(leaveRequestId);
 
 		_validatePendingStatus(leaveRequest);
 
 		if (approverUserId <= 0) {
-			throw new IllegalArgumentException(
-				"Approver user ID is required");
+			throw new IllegalArgumentException("Approver user ID is required");
 		}
 
-		leaveRequest.setStatus("APPROVED");
+        // UPGRADED: Multi-Tier Approval Logic
+        String currentStatus = leaveRequest.getStatus();
+        if ("PENDING_MANAGER".equals(currentStatus) || "PENDING".equals(currentStatus)) {
+            leaveRequest.setStatus("PENDING_HR");
+        } else if ("PENDING_HR".equals(currentStatus)) {
+            leaveRequest.setStatus("APPROVED");
+        }
+
 		leaveRequest.setApproverUserId(approverUserId);
-		leaveRequest.setApproverComments(
-			Validator.isNull(approverComments) ?
-				"" : approverComments.trim());
+		leaveRequest.setApproverComments(Validator.isNull(approverComments) ? "" : approverComments.trim());
 		leaveRequest.setModifiedDate(new Date());
 
 		return leaveRequestPersistence.update(leaveRequest);
@@ -91,19 +91,16 @@ public class LeaveRequestLocalServiceImpl
 			String approverComments)
 		throws PortalException {
 
-		LeaveRequest leaveRequest =
-			leaveRequestPersistence.findByPrimaryKey(leaveRequestId);
+		LeaveRequest leaveRequest = leaveRequestPersistence.findByPrimaryKey(leaveRequestId);
 
 		_validatePendingStatus(leaveRequest);
 
 		if (approverUserId <= 0) {
-			throw new IllegalArgumentException(
-				"Approver user ID is required");
+			throw new IllegalArgumentException("Approver user ID is required");
 		}
 
 		if (Validator.isNull(approverComments)) {
-			throw new IllegalArgumentException(
-				"Rejection comment is required");
+			throw new IllegalArgumentException("Rejection comment is required");
 		}
 
 		leaveRequest.setStatus("REJECTED");
@@ -114,12 +111,23 @@ public class LeaveRequestLocalServiceImpl
 		return leaveRequestPersistence.update(leaveRequest);
 	}
 
-	public List<LeaveRequest> getLeavesByEmployeeId(long employeeId) {
+    // FIXED: Renamed to match exactly what the Dashboard expects!
+	public List<LeaveRequest> getLeaveRequestsByEmployeeId(long employeeId) {
 		return leaveRequestPersistence.findByEmployeeId(employeeId);
 	}
 
-	public List<LeaveRequest> getLeavesByStatus(String status) {
+    // FIXED: Renamed to match exactly what the Dashboard expects!
+	public List<LeaveRequest> getLeaveRequestsByStatus(String status) {
 		return leaveRequestPersistence.findByStatus(status);
+	}
+
+    // FIXED: Cleaned up the invisible characters causing syntax errors
+	public List<LeaveRequest> getLeaveRequestsByEmployeeId(long employeeId, int start, int end) {
+		return leaveRequestPersistence.findByEmployeeId(employeeId, start, end);
+	}
+
+	public int getLeaveRequestsCountByEmployeeId(long employeeId) {
+		return leaveRequestPersistence.countByEmployeeId(employeeId);
 	}
 
 	private void _validateLeaveRequest(
@@ -127,8 +135,7 @@ public class LeaveRequestLocalServiceImpl
 		String reason) {
 
 		if (employeeId <= 0) {
-			throw new IllegalArgumentException(
-				"Employee ID must be greater than zero");
+			throw new IllegalArgumentException("Employee ID must be greater than zero");
 		}
 
 		if (!_allowedLeaveTypes.contains(leaveType)) {
@@ -136,13 +143,11 @@ public class LeaveRequestLocalServiceImpl
 		}
 
 		if ((fromDate == null) || (toDate == null)) {
-			throw new IllegalArgumentException(
-				"From date and to date are required");
+			throw new IllegalArgumentException("From date and to date are required");
 		}
 
 		if (toDate.before(fromDate)) {
-			throw new IllegalArgumentException(
-				"To date cannot be earlier than from date");
+			throw new IllegalArgumentException("To date cannot be earlier than from date");
 		}
 
 		if (Validator.isNull(reason)) {
@@ -150,30 +155,19 @@ public class LeaveRequestLocalServiceImpl
 		}
 
 		if (reason.trim().length() > 500) {
-			throw new IllegalArgumentException(
-				"Reason cannot exceed 500 characters");
+			throw new IllegalArgumentException("Reason cannot exceed 500 characters");
 		}
 	}
 
 	private void _validatePendingStatus(LeaveRequest leaveRequest) {
-		if (!"PENDING".equals(leaveRequest.getStatus())) {
-			throw new IllegalStateException(
-				"Only pending leave requests can be processed");
+        String status = leaveRequest.getStatus();
+        // UPGRADED: Now accepts the multi-tier workflow statuses
+		if (!"PENDING".equals(status) && !"PENDING_MANAGER".equals(status) && !"PENDING_HR".equals(status)) {
+			throw new IllegalStateException("Only pending leave requests can be processed");
 		}
 	}
 
 	private static final Set<String> _allowedLeaveTypes = Set.of(
 		"CASUAL", "EARNED", "LOP", "SICK");
-	
-	public List<LeaveRequest> getLeaveRequestsByEmployeeId(
-		    long employeeId, int start, int end) {
-
-		    return leaveRequestPersistence.findByEmployeeId(
-		        employeeId, start, end);
-		}
-
-		public int getLeaveRequestsCountByEmployeeId(long employeeId) {
-		    return leaveRequestPersistence.countByEmployeeId(employeeId);
-		}
 
 }

@@ -337,10 +337,25 @@ public class LeaveRequestLocalServiceWrapper
 
 	@Override
 	public java.util.List<com.hrms.leave.model.LeaveRequest>
+		getLeaveRequestsByEmployeeId(long employeeId) {
+
+		return _leaveRequestLocalService.getLeaveRequestsByEmployeeId(
+			employeeId);
+	}
+
+	@Override
+	public java.util.List<com.hrms.leave.model.LeaveRequest>
 		getLeaveRequestsByEmployeeId(long employeeId, int start, int end) {
 
 		return _leaveRequestLocalService.getLeaveRequestsByEmployeeId(
 			employeeId, start, end);
+	}
+
+	@Override
+	public java.util.List<com.hrms.leave.model.LeaveRequest>
+		getLeaveRequestsByStatus(String status) {
+
+		return _leaveRequestLocalService.getLeaveRequestsByStatus(status);
 	}
 
 	/**
@@ -393,20 +408,6 @@ public class LeaveRequestLocalServiceWrapper
 	public int getLeaveRequestsCountByEmployeeId(long employeeId) {
 		return _leaveRequestLocalService.getLeaveRequestsCountByEmployeeId(
 			employeeId);
-	}
-
-	@Override
-	public java.util.List<com.hrms.leave.model.LeaveRequest>
-		getLeavesByEmployeeId(long employeeId) {
-
-		return _leaveRequestLocalService.getLeavesByEmployeeId(employeeId);
-	}
-
-	@Override
-	public java.util.List<com.hrms.leave.model.LeaveRequest> getLeavesByStatus(
-		String status) {
-
-		return _leaveRequestLocalService.getLeavesByStatus(status);
 	}
 
 	/**
@@ -476,4 +477,4 @@ public class LeaveRequestLocalServiceWrapper
 	private LeaveRequestLocalService _leaveRequestLocalService;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1427945110
+// LIFERAY-SERVICE-BUILDER-HASH:-1208593204

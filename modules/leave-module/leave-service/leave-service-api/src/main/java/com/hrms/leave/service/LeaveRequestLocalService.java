@@ -265,8 +265,14 @@ public interface LeaveRequestLocalService
 	public List<LeaveRequest> getLeaveRequests(int start, int end);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<LeaveRequest> getLeaveRequestsByEmployeeId(long employeeId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<LeaveRequest> getLeaveRequestsByEmployeeId(
 		long employeeId, int start, int end);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<LeaveRequest> getLeaveRequestsByStatus(String status);
 
 	/**
 	 * Returns all the leave requests matching the UUID and company.
@@ -305,12 +311,6 @@ public interface LeaveRequestLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getLeaveRequestsCountByEmployeeId(long employeeId);
 
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<LeaveRequest> getLeavesByEmployeeId(long employeeId);
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<LeaveRequest> getLeavesByStatus(String status);
-
 	/**
 	 * Returns the OSGi service identifier.
 	 *
@@ -344,4 +344,4 @@ public interface LeaveRequestLocalService
 	public LeaveRequest updateLeaveRequest(LeaveRequest leaveRequest);
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1306096972
+// LIFERAY-SERVICE-BUILDER-HASH:-822217208

@@ -298,10 +298,20 @@ public class LeaveRequestLocalServiceUtil {
 	}
 
 	public static List<LeaveRequest> getLeaveRequestsByEmployeeId(
+		long employeeId) {
+
+		return getService().getLeaveRequestsByEmployeeId(employeeId);
+	}
+
+	public static List<LeaveRequest> getLeaveRequestsByEmployeeId(
 		long employeeId, int start, int end) {
 
 		return getService().getLeaveRequestsByEmployeeId(
 			employeeId, start, end);
+	}
+
+	public static List<LeaveRequest> getLeaveRequestsByStatus(String status) {
+		return getService().getLeaveRequestsByStatus(status);
 	}
 
 	/**
@@ -346,14 +356,6 @@ public class LeaveRequestLocalServiceUtil {
 
 	public static int getLeaveRequestsCountByEmployeeId(long employeeId) {
 		return getService().getLeaveRequestsCountByEmployeeId(employeeId);
-	}
-
-	public static List<LeaveRequest> getLeavesByEmployeeId(long employeeId) {
-		return getService().getLeavesByEmployeeId(employeeId);
-	}
-
-	public static List<LeaveRequest> getLeavesByStatus(String status) {
-		return getService().getLeavesByStatus(status);
 	}
 
 	/**
@@ -405,4 +407,4 @@ public class LeaveRequestLocalServiceUtil {
 			LeaveRequestLocalServiceUtil.class, LeaveRequestLocalService.class);
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-579549089
+// LIFERAY-SERVICE-BUILDER-HASH:-420124807
